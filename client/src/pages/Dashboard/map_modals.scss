@@ -1,0 +1,43 @@
+    .addNewLocation .modal-dialog {
+        height: 650px;
+    }
+
+    .mapboxgl-ctrl-geocoder {
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+    }
+
+    .mapboxgl-ctrl-geocoder input[type='text'] {
+        font-size: 18px;
+        padding-top: 15px;
+    }
+
+    .mapboxgl-ctrl-geocoder ul {
+        font-size: 16px;
+    }
+
+    .hoverOver:hover {
+        color: #6d00a2;
+        cursor: pointer;
+    }
+
+    /* follow a new location modal error message transition */
+    #chooseLocationToChange {
+        -webkit-transition-property: color;
+        /* Safari */
+        -webkit-transition-duration: .5s;
+        /* Safari */
+        transition-property: color;
+        transition-duration: .5s;
+    }
+
+    /* follow a new location modal error message transition */
+    #saveLocationToFollow {
+        -webkit-transition-property: color;
+        /* Safari */
+        -webkit-transition-duration: .5s;
+        /* Safari */
+        transition-property: color;
+        transition-duration: .5s;
+    }

@@ -1,0 +1,9 @@
+.account.action-container {
+  text-align: left;
+}
+
+@media (max-width: 767px) {
+  .account.action-container {
+    text-align: center;
+  }
+}

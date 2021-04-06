@@ -1,0 +1,23 @@
+{
+  "name": "ibouge-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && yarn start\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ibouge/ibouge-react.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/ibouge/ibouge-react/issues"
+  },
+  "homepage": "https://gitlab.com/ibouge/ibouge-react#readme",
+  "devDependencies": {
+    "concurrently": "^6.0.0"
+  }
+}

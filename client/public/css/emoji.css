@@ -1,0 +1,297 @@
+span.emoji {
+    display: -moz-inline-box;
+    -moz-box-orient: vertical;
+    display: inline-block;
+    vertical-align: baseline;
+    *vertical-align: auto;
+    *zoom: 1;
+    *display: inline;
+    width: 1em;
+    height: 1em;
+    background-size: 1em;
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+}
+
+span.emoji-sizer {
+    line-height: 0.81em;
+    font-size: 1em;
+    margin: -2px 0;
+}
+
+span.emoji-outer {
+    display: -moz-inline-box;
+    display: inline-block;
+    *display: inline;
+    height: 1em;
+    width: 1em;
+}
+
+span.emoji-inner {
+    display: -moz-inline-box;
+    display: inline-block;
+    text-indent: -9999px;
+    width: 100%;
+    height: 100%;
+    vertical-align: baseline;
+    *vertical-align: auto;
+    *zoom: 1;
+}
+
+img.emoji {
+    width: 1em;
+    height: 1em;
+}
+
+.emoji-wysiwyg-editor:empty:before {
+    content: attr(placeholder);
+    color: #9aa2ab;
+}
+
+.emoji-picker-container {
+    position: relative;
+}
+
+.emoji-picker-icon {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 20px;
+    opacity: 0.7;
+    z-index: 100;
+    transition: none;
+    color: gray;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.emoji-picker-icon.parent-has-scroll {
+    right: 28px;
+}
+
+.emoji-picker-icon:hover {
+    opacity: 1;
+}
+
+/* Emoji area */
+.emoji-wysiwyg-editor:empty:before {
+    content: attr(placeholder);
+    color: #9aa2ab;
+}
+
+.emoji-wysiwyg-editor:active:before,
+.emoji-wysiwyg-editor:focus:before {
+    content: none;
+}
+
+.emoji-wysiwyg-editor {
+    padding: 6px;
+    padding-right: 35px;
+    margin-bottom: 0px;
+    min-height: 35px; /* 35 */
+    height: 30px;
+    max-height: 284px;
+    overflow: auto;
+    line-height: 17px;
+    border: 1px solid #d2dbe3;
+    border-radius: 2px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    -webkit-user-select: text;
+    word-wrap: break-word;
+}
+
+.emoji-wysiwyg-editor.parent-has-scroll {
+     padding-right: 40px;
+ }
+
+.emoji-wysiwyg-editor.single-line-editor {
+    min-height: 35px;
+    height: inherit;
+}
+
+.emoji-wysiwyg-editor img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin: -3px 0 0 0;
+}
+
+.emoji-menu {
+    position: absolute;
+    z-index: 999;
+    width: 225px;
+    overflow: hidden;
+    border: 1px #dfdfdf solid;
+    background-color: #ffffff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.emoji-items-wrap1 {
+    background: #ffffff;
+    padding: 5px 2px 5px 5px;
+}
+
+.emoji-items-wrap1 .emoji-menu-tabs {
+    width: 100%;
+    margin-bottom: 8px;
+    margin-top: 3px;
+}
+
+.emoji-items-wrap1 .emoji-menu-tabs td {
+    text-align: center;
+    color: white;
+    line-height: 0;
+}
+
+.emoji-menu-tabs .emoji-menu-tab {
+    display: inline-block;
+    width: 24px;
+    height: 29px;
+    background: url('../img/ngEmojiImg/IconsetSmiles.png') no-repeat;
+    background-size: 22px 22px;
+    border: 0;
+    margin-top: 10px;
+}
+
+.emoji-menu-tabs .icon-recent,
+.emoji-menu-tabs .icon-recent-selected { 
+    background-image: url('../img/ngEmojiImg/categories/recent.png');
+}
+
+.emoji-menu-tabs .icon-people,
+.emoji-menu-tabs .icon-people-selected {
+    background-image: url('../img/ngEmojiImg/categories/people.png');
+}
+
+.emoji-menu-tabs .icon-nature,
+.emoji-menu-tabs .icon-nature-selected {
+    background-image: url('../img/ngEmojiImg/categories/nature.png');
+}
+
+.emoji-menu-tabs .icon-food,
+.emoji-menu-tabs .icon-food-selected {
+    background-image: url('../img/ngEmojiImg/categories/food_and_drink.png');
+}
+
+.emoji-menu-tabs .icon-activity,
+.emoji-menu-tabs .icon-activity-selected {
+    background-image: url('../img/ngEmojiImg/categories/activity.png');
+}
+
+.emoji-menu-tabs .icon-travel,
+.emoji-menu-tabs .icon-travel-selected {
+    background-image: url('../img/ngEmojiImg/categories/travel_and_places.png');
+}
+
+.emoji-menu-tabs .icon-objects,
+.emoji-menu-tabs .icon-objects-selected {
+    background-image: url('../img/ngEmojiImg/categories/objects.png');
+}
+
+.emoji-menu-tabs .icon-flags,
+.emoji-menu-tabs .icon-flags-selected {
+    background-image: url('../img/ngEmojiImg/categories/flags.png');
+}
+
+.emoji-menu-tabs .icon-symbol,
+.emoji-menu-tabs .icon-symbol-selected {
+    background-image: url('../img/ngEmojiImg/categories/symbol.png');
+}
+
+.emoji-menu-tabs .icon-recent,
+.emoji-menu-tabs .icon-people,
+.emoji-menu-tabs .icon-nature,
+.emoji-menu-tabs .icon-food,
+.emoji-menu-tabs .icon-activity,
+.emoji-menu-tabs .icon-travel,
+.emoji-menu-tabs .icon-objects,
+.emoji-menu-tabs .icon-flags,
+.emoji-menu-tabs .icon-symbol {
+    display: inline-block;
+    width: 24px;
+    height: 29px;
+    background-size: 22px 22px;
+    border: 0;
+    margin-top: 10px;
+    opacity: 0.5;
+}
+
+.emoji-menu-tabs .icon-recent:hover,
+.emoji-menu-tabs .icon-people:hover,
+.emoji-menu-tabs .icon-nature:hover,
+.emoji-menu-tabs .icon-food:hover,
+.emoji-menu-tabs .icon-activity:hover,
+.emoji-menu-tabs .icon-travel:hover,
+.emoji-menu-tabs .icon-objects:hover,
+.emoji-menu-tabs .icon-flags:hover,
+.emoji-menu-tabs .icon-symbol:hover  {
+    display: inline-block;
+    width: 24px;
+    height: 29px;
+    background-size: 22px 22px;
+    border: 0;
+    margin-top: 10px;
+    opacity: 1;
+}
+
+.emoji-menu {
+    width: 290px;
+}
+
+.emoji-menu .emoji-items-wrap {
+    height: 250px;
+}
+
+.emoji-items {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 285px;
+    height: 250px;
+}
+
+.emoji-menu .emoji-items {
+    padding-right: 8px;
+    outline: 0 !important;
+}
+
+.emoji-menu img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    border: 0 none;
+}
+
+.emoji-menu .emoji-items a {
+    margin: -1px 0 0 -1px;
+    padding: 5px;
+    display: block;
+    float: left;
+    border-radius: 2px;
+    border: 0;
+}
+
+.emoji-menu .emoji-items a:hover {
+    background-color: #edf2f5;
+}
+
+.emoji-menu:after {
+    content: ' ';
+    display: block;
+    clear: left;
+}
+
+.emoji-menu a .label {
+    display: none;
+}

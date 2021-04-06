@@ -1,0 +1,9 @@
+.profile.action-container {
+  text-align: left;
+}
+
+@media (max-width: 767px) {
+  .profile.action-container {
+    text-align: center;
+  }
+}
