@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd server && npm run dev\" \"cd client && yarn start\" "
+    "start": "node server/server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false \"cd server && npm install\" \"cd client && yarn install\"  \"cd client && yarn build\""
   },
   "repository": {
     "type": "git",
