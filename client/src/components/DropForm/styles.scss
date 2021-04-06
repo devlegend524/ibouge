@@ -1,0 +1,66 @@
+.mail-dropdown {
+  width: 400px;
+  padding: 0;
+  border-radius: 8px;
+  margin-top: 25px;
+  right: -30px;
+}
+
+.dropdown-menu.notification-dropdown {
+  width: 400px;
+  border-radius: 8px;
+  margin-top: 25px;
+  right: -30px;
+  padding: 0;
+}
+
+.dropdown-arrow {
+  right: 25px;
+  top: -10px;
+}
+
+.dropdown-header {
+  background: #6148a1;
+  color: white;
+  padding: 20px;
+  border-top-right-radius: 7px;
+  border-top-left-radius: 7px;
+}
+
+.dropdown-header-title {
+  font-size: 21px;
+}
+
+.dropdown-header-all {
+  margin-left: 40%;
+  font-size: 15px;
+}
+
+.dropdown-header-unread {
+  padding-left: 40px;
+  color: #afa2d0;
+  font-size: 15px
+}
+
+.dropdown-header-number {
+  color: #fc6d8d;
+  font-size: 16px;
+  padding-left: 5px;
+}
+
+.dropdown-empty {
+  margin: auto;
+  font-size: 20px;
+  padding: 20px;
+  color: #b5b5b5;
+}
+
+.dropdown-unread-list {
+  max-height: 400px;
+  overflow: auto;
+}
+
+.dropdown-menu.mail-dropdown,
+.dropdown-menu.notification-dropdown {
+  display: block;
+}

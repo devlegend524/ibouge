@@ -1,0 +1,9 @@
+.notification.action-container {
+  text-align: left;
+}
+
+@media (max-width: 767px) {
+  .notification.action-container {
+    text-align: center;
+  }
+}

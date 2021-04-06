@@ -1,0 +1,374 @@
+<html ng-app="ibouge">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="keywords" content="iinspirationdirect">
+		<meta name="description"
+			content="ibouge, a geo-networking platform. Surf the world’s users on ibouge and make new friends around the world.">
+		<title>ibouge.com</title>
+
+		<link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192" href="img/favicon/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+		<link rel="manifest" href="img/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+
+		<!-- Bootstrap - Latest Bootstrap - Breaks CSS from previous devloper but -->
+		<!-- it looks like the version that should be used to make things responsive -->
+		<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+
+		<!-- Jquery -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+			integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+			crossorigin="anonymous"></script>
+
+		<!-- Old bootstrap link replaced with latest release above. Newest version break the -->
+		<!-- CSS on the website. However it looks like it's what should be used -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<!-- Bootstraps JS -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+			integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+			crossorigin="anonymous"></script>
+
+		<!-- Popper / Bootstrap had this as option. Not sure if Bootstrap actually uses it -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+			integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Anton|Source+Sans+Pro">
+		<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">-->
+
+		<link rel="stylesheet" href="/css/ui-select.css">
+		<link rel="stylesheet" href="/css/ng-img-crop.css">
+
+		<link rel="stylesheet" href="/css/custom.css">
+		<link rel="stylesheet" href="/css/responsive.css">
+		<link rel="stylesheet" href="/css/build.css">
+		<link rel="stylesheet" href="/css/lightbox.css">
+		<link rel="stylesheet" href="/css/emoji.css">
+		<!--<link rel="stylesheet" href="/css/nanoscroller.css">-->
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.js"></script>
+		<script src="/js/ui-bootstrap.js"></script>
+		<script src="/js/ui-bootstrap-tpls-2.5.0.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.js"></script>
+		<script src="/js/ui-select.js"></script>
+		<script src="/js/ng-img-crop.js"></script>
+
+		<script src="app.js"></script>
+		<script src="/routes/routes.js"></script>
+
+		<script src="/socket.io/socket.io.js"></script>
+
+		<script src="/services/userService.js"></script>
+		<script src="/services/utilService.js"></script>
+		<script src="/services/authService.js"></script>
+		<script src="/services/chatService.js"></script>
+		<script src="/services/notificationService.js"></script>
+		<script src="/services/socketFactory.js"></script>
+		<script src="/services/microblogService.js"></script>
+		<script src="/services/mapOSMService.js"></script>
+		<script src="/services/microblogMapService.js"></script>
+		<script src="/services/profileSetupMapService.js"></script>
+		<script src="/services/addMicroblogsToMapService.js"></script>
+		<script src="/services/addUsersToMapService.js"></script>
+		<script src="/services/eventService.js"></script>
+		<script src="/services/dashboardMapService.js"></script>
+		<script src="/services/createEventMapService.js"></script>
+		<script src="/services/addEventsToMapService.js"></script>
+		<script src="/services/mixedServices.js"></script>
+
+		<script src="/directives/directives.js"></script>
+		<script src="/directives/highMapsDirective.js"></script>
+		<script src="/directives/chatDirective.js"></script>
+		<script src="/directives/passwordConfirm.js"></script>
+		<script src="/directives/countryModalDirective.js"></script>
+		<script src="/directives/mapOSMDirective.js"></script>
+		<script src="/directives/ng-file-upload.js"></script>
+		<script src="/directives/microblogMapDirective.js"></script>
+		<script src="/directives/profileSetupMapDirective.js"></script>
+		<script src="/directives/usersMainMapAreaDirective.js"></script>
+
+		<script src="/filters/filters.js"></script>
+
+		<script src="/controllers/mainController.js"></script>
+		<script src="/controllers/authController.js"></script>
+		<script src="/controllers/mapController.js"></script>
+		<script src="/controllers/myDashboardController.js"></script>
+		<script src="/controllers/myProfileSettingsController.js"></script>
+		<script src="/controllers/eventController.js"></script>
+		<script src="/controllers/profileController.js"></script>
+		<script src="/controllers/profileSetupController.js"></script>
+		<script src="/controllers/modelInstanceControllers.js"></script>
+		<script src="/controllers/groupChatModalController.js"></script>
+		<script src="/controllers/microblogController.js"></script>
+		<script src="/controllers/usersMainMapAreaController.js"></script>
+		<script src="/controllers/createEventController.js"></script>
+
+		<script src="/animations/animations.js"></script>
+
+		<!-- load highmaps -->
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+		<script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
+
+		<!--  load Mapbox api's for OSM maps  -->
+		<script src='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+		<link href='https://api.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+
+		<!--  Add Mapbox-gl geocoder  -->
+		<script
+			src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+		<link rel='stylesheet'
+			href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css'
+			type='text/css' />
+
+		<!-- Mapbox-gl-circle -->
+		<script src='https://npmcdn.com/mapbox-gl-circle/dist/mapbox-gl-circle.min.js'></script>
+
+		<!--Lightbox library-->
+		<script src="js/lightbox-plus-jquery.js"></script>
+
+		<!--JQuery cdn-->
+		<script src="https://code.jquery.com/jquery-3.3.1.js"
+			integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+		<!--OneSignal/emoji picker libary-->
+		<script src="js/config.js"></script>
+		<script src="js/util.js"></script>
+		<script src="js/jquery.emojiarea.js"></script>
+		<script src="js/emoji-picker.js"></script>
+		<script src="js/nanoscroller.min.js"></script>
+		<script src="js/tether.min.js"></script>
+
+		<!--angular-spinner library-->
+		<script src="js/angular-spinner.min.js"></script>
+
+	</head>
+
+	<body ng-controller="MainController" ng-class="state == 'mapOSM' || state == 'home' ? 'no-margin' : 'some-margin'">
+		<nav class="navbar navbar-default navbar-fixed-top" ng-show="showToolbar">
+			<div class="container-fluid">
+
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+						data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand d-block d-sm-none" ng-click="makeFalse()"
+						ng-class="{'navi-heads': state == 'home', 'navi-heads-subhead': state != 'home'}"
+						ui-sref="home">
+						<img src="img/ibouge-home-logo.png" />
+					</a>
+					<span
+						ng-class="{'navi-heads': state == 'mydashboard', 'navi-heads-subhead': state != 'mydashboard'}"
+						class=""><a ui-sref="mydashboard" style="color: inherit; text-decoration: none;">MY
+							DASHBOARD</a></span>
+					<span ng-class="state == 'mapOverview' || state == 'mapOSM' ? 'navi-heads' : 'navi-heads-subhead'"
+						class="d-block d-sm-none"><a ui-sref="mapOverview"
+							style="color: inherit; text-decoration: none;">MAP
+							OVERVIEW</a></span>
+					<span ng-class="urlUser === ('/profile/' + sess._id) ? 'navi-heads' : 'navi-heads-subhead'"
+						class="d-block d-sm-none"><a ui-sref="profile({USER_ID: sess._id})"
+							style="color: inherit; text-decoration: none;">MY PROFILE</a></span>
+				</div>
+
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<div class="header-search">
+								<input id="searchText" type="text" class="search-form" placeholder="Type to search..."
+									ng-keyup="doSearch(searchText)" ng-model="searchText">
+								<button class="btn btn-default search-form-search-btn" type="button"><i
+										class="fa fa-search" aria-hidden="true"></i></button>
+								<ibg-main-search-results click-outside="showResults = false"></ibg-main-search-results>
+							</div>
+						</li>
+						<li>
+							<div class="header-search">
+								<div class="btn-group" uib-dropdown is-open="inbox.isOpen"
+									on-toggle="inboxToggle(inbox.isOpen)">
+									<button style="border-radius: 0" class="btn btn-default search-form-search-btn"
+										type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="true" uib-dropdown-toggle ng-disabled="disabled">
+										<img ng-src="{{inbox.hasNewMessage ? 'img/inbox-alert.png' : 'img/inbox-empty.png'}}"
+											class="top-nav-icons btnd" />
+									</button>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenu1"
+										style="width: 400px; padding: 0; border-radius: 8px; margin-top: 25px; right: -30px;">
+										<div class="up-arrow" style="right: 25px; top: -10px;"></div>
+										<div
+											style="background: #6148a1; padding: 20px; border-top-right-radius: 7px; border-top-left-radius: 7px;">
+											<div>
+												<span style="font-size: 21px;">Inbox({{inbox.data.length}})</span><span
+													style="margin-left: 40%;font-size: 15px;">All</span><span
+													style="padding-left: 40px;color: #afa2d0;font-size: 15px">Unread</span><span
+													style="color: #fc6d8d; font-size: 16px; padding-left: 5px;">{{inbox.unread}}</span>
+											</div>
+										</div>
+										<div ng-if="inbox.data.length == 0" style="display: flex">
+											<div style="margin: auto; font-size: 20px; padding: 20px; color: #b5b5b5;">
+												Empty</div>
+										</div>
+										<div style="max-height: 400px; overflow: auto;">
+											<div ng-repeat="item in inbox.data"
+												ng-class="{'mail-unread':item.is_read === false}" class="inbox-item-wpr"
+												ng-bind-html="item | InboxFilter" ng-click="goToChat(item)">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="header-search">
+								<div class="btn-group" uib-dropdown is-open="notifications.isOpen"
+									on-toggle="notificationsToggle(notifications.isOpen)">
+									<button style="border-radius: 0"
+										class="btn btn-default dropdown-toggle search-form-search-btn" type="button"
+										id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="true" uib-dropdown-toggle ng-disabled="disabled">
+										<img ng-src="{{notifications.hasNewMessage ? 'img/notification.png' : 'img/notification-empty.png'}}"
+											class="top-nav-icons" />
+									</button>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenu1"
+										style="width: 400px; border-radius: 8px; margin-top: 25px; right: -30px; padding: 0;">
+										<div class="up-arrow" style="right: 25px; top: -10px;"></div>
+										<div
+											style="background: #6148a1; padding: 20px; border-top-right-radius: 7px; border-top-left-radius: 7px;">
+											<div>
+												<span style="font-size: 20px;">Notifications</span>
+											</div>
+										</div>
+										<div ng-if="notifications.data.length == 0" style="display: flex">
+											<div style="margin: auto; font-size: 20px; padding: 20px; color: #b5b5b5;">
+												Empty</div>
+										</div>
+										<div style="max-height: 400px; overflow: auto;">
+											<div ng-repeat="notification in notifications.data"
+												ng-if="notification.type != 'create-group-chat'"
+												ng-click="openNotification(notification)" class="notification-item-wpr">
+												<img style="min-width: 45px; width: 45px; height: 45px; margin:0 10px; border-radius: 50%;"
+													alt="Image" ng-src="{{notification.image}}">
+												<div style="width: calc(100% - 70px);">
+													<div style="font-size: 14px; display: flex;">
+														<span class="no-overflow"
+															style="margin-right: 10px;">{{notification.text}}</span>
+													</div>
+													<div
+														style="color: #777; margin-top: 5px; display: flex; font-size: 12px;">
+														{{notification.date | date: 'MMM dd, yyyy - h:m:s'}}
+														<span style="font-size: 5px; margin: auto 5px auto 10px;">
+															<i class="fa fa-circle" aria-hidden="true"></i>
+														</span>
+														{{item | ReadUnreadFilter}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="header-search">
+								<div class="btn-group" uib-dropdown>
+									<button class="btn btn-default dropdown-toggle search-form-prof-btn" type="button"
+										id="dropdownMenu1" style="display: flex;" data-toggle="dropdown"
+										aria-haspopup="true" aria-expanded="true" uib-dropdown-toggle>
+										<img src="{{getProfilePic(sess.profile_pic)}}" class="top-nav-prof-icons" />
+										<span class="top-prof-name">{{sess.fname}} {{sess.lname}}</span>
+										<span class="caret prof-name-drop-ico" style="margin: auto;"></span>
+									</button>
+									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1" role="menu">
+										<li><a ui-sref="myprofilesettings">Profile</a></li>
+										<li><a href="#/myprofilesettings" ng-click="setTrue('account')">Account</a></li>
+										<li><a href="#/myprofilesettings" ng-click="setTrue('privacy')">Privacy</a></li>
+										<li><a href="#/myprofilesettings"
+												ng-click="setTrue('notifications')">Notifications</a></li>
+										<!--<li><a href="#">Help</a></li> there isn't functionality for this yet-->
+										<li class="divider"></li>
+										<li style="cursor: pointer;"><a ng-click="signout()">Sign Out</a></li>
+									</ul>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!-- This is where everything below the top nav bar get's placed  -->
+		<div class="body-content">
+			<!-- This is where the "urlRouterProvider" directs the "stateProviders" "state" to -->
+			<div ui-view>
+
+			</div>
+		</div>
+		<footer class="footer" ng-show="showFooter">
+			<div class="container containerWidth">
+				<div class="row">
+					<div class="col-md-4 col-sm-4 col-12 text-center d-block d-sm-none"></div>
+					<div class="col-md-4 col-sm-4 col-12 text-center">
+						<a href="">About</a>
+						<a href="">Team</a>
+						<a href="">Contact</a>
+						<a href="">Mission</a>
+						<a href="">Technology</a>
+					</div>
+					<div class="col-md-4 col-sm-4 col-12 text-center d-block d-sm-none"></div>
+				</div>
+			</div>
+		</footer>
+
+		<ibg-chat></ibg-chat>
+
+		<script type="text/ng-template" id="profileImage.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Profile image</h3>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom: 5px;" ><input type="file" id="fileInput" ibg-read-file /></div>
+			<div class="cropArea" style="height: calc(100vh - 250px);">
+				<img-crop image="originalImage" result-image="croppedImage" style="background: rgba(175, 162, 208, 0.14);"></img-crop>
+			</div>
+			<img style="display: none" ng-src="{{croppedImage}}" id="ibg-cropped-image">
+			<canvas style="display: none;" id="ibg-image-to-canvas" width="88" height="88" >
+				Your browser does not support the HTML5 canvas tag.
+			</canvas>
+			<img style="display: none;", ng-src="{{canvasToImage}}" id="ibg-canvas-to-image">
+        </div>
+        <div class="modal-footer">
+            <button ng-disabled="!originalImage || originalImage == ''" class="btn btn-primary" type="button" ng-click="upload()">Upload</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+		<div ng-include="'groupChat.html'" ng-controller="GroupChatModalController"></div>
+	</body>
+
+</html>

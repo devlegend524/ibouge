@@ -1,0 +1,31 @@
+	#geocoder {
+		width: 100%;
+		height: 50px;
+		margin-top: 15px;
+	}
+
+	.mapboxgl-ctrl-geocoder {
+		width: 100%;
+		height: 50px;
+		max-width: 100%;
+	}
+
+	.mapboxgl-ctrl-geocoder input[type=text] {
+		font-size: large;
+		margin-top: 5px;
+	}
+
+	.mapboxgl-ctrl-geocoder span.geocoder-icon-search {
+		top: 15px;
+		left: 15px;
+	}
+
+	.mapboxgl-ctrl-geocoder ul {
+		font-size: large;
+	}
+
+	.mapboxgl-ctrl-geocoder {
+		z-index: 0 !important;
+	}
+
+/* signup page styles */
