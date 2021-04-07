@@ -9,7 +9,7 @@
     "dev": "concurrently \"npm run develop\" \"cd client && yarn start\" ",
     "start": "node server.js",
     "develop": "nodemon server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && yarn install --prefix client && yarn build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && yarn install --prefix client && yarn run build --prefix client"
   },
   "repository": {
     "type": "git",
