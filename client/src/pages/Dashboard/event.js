@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 
-import { Link, useHistory } from "react-router-dom";
+import {Link, useHistory} from 'react-router-dom';
 
 const Event = () => {
   const history = useHistory();
@@ -8,7 +8,7 @@ const Event = () => {
   const [myMicroblogs, setMyMicroblogs] = useState([]);
 
   const goToCreateEventPage = () => {
-    history.push("/create-event");
+    history.push('/create-event');
   };
 
   const viewEvent = () => {};
@@ -23,25 +23,25 @@ const Event = () => {
 
   return (
     <>
-      <div style={{ height: "300px" }} className="user-event-box">
+      <div style={{height: '300px'}} className="user-event-box">
         <div>
           <h4 className="event-box-heading">
             Local Events
-            <Link
-              to=""
+            <span
               className="event-box-heading-add-event"
+              style={{cursor: 'pointer'}}
               onClick={goToCreateEventPage}
             >
               <i className="fa fa-plus"></i> ADD NEW
-            </Link>
+            </span>
           </h4>
         </div>
-        <div style={{ height: "80%", overflowY: "auto" }}>
+        <div style={{height: '80%', overflowY: 'auto'}}>
           {myEvents.map((event, index) => (
             <div key={index} className="events-wrap-view">
               <div className="col-md-2 col-sm-2 col-xs-2 colPadZero">
                 <img
-                  style={{ height: "70px", width: "70px" }}
+                  style={{height: '70px', width: '70px'}}
                   src={event.eventImage}
                   className="events-more-img"
                   alt="events"
@@ -49,16 +49,14 @@ const Event = () => {
               </div>
               <div
                 className="col-md-7 col-sm-7 col-xs-7 colPadZero"
-                style={{ cursor: "pointer" }}
+                style={{cursor: 'pointer'}}
                 onClick={() => viewEvent(event)}
                 aria-hidden="true"
               >
                 <div className="event-heading-style">
                   <span>{event.name}</span>
                 </div>
-                <div className="event-sub-heading-style">
-                  {/* <span>{event.dateOfEvent | date: 'mediumDate'} at {event.eventStartTime | date: 'shortTime'}</span> */}
-                </div>
+                <div className="event-sub-heading-style"></div>
               </div>
               <div className="col-md-2 col-sm-2 col-xs-2 colPadZero event-seperator-border">
                 <div className="event-heading-style">
@@ -69,8 +67,8 @@ const Event = () => {
                     <i
                       className={
                         event.likes.length > 0
-                          ? "event-box-liked fa fa-heart"
-                          : "fa fa-heart"
+                          ? 'event-box-liked fa fa-heart'
+                          : 'fa fa-heart'
                       }
                       onClick={() => addLike(event)}
                       aria-hidden="true"
@@ -83,7 +81,7 @@ const Event = () => {
               </div>
               <div
                 className="col-md-1 col-sm-1 col-xs-1 colPadZero"
-                style={{ cursor: "pointer" }}
+                style={{cursor: 'pointer'}}
                 onClick={() => viewEvent(event)}
                 aria-hidden="true"
               >
@@ -96,8 +94,8 @@ const Event = () => {
         </div>
       </div>
 
-      <div className="user-event-box" style={{ height: "300px" }}>
-        <div style={{ height: "18%" }}>
+      <div className="user-event-box" style={{height: '300px'}}>
+        <div style={{height: '18%'}}>
           <h4 className="event-box-heading">
             My Microblogs
             <Link
@@ -109,12 +107,12 @@ const Event = () => {
             </Link>
           </h4>
         </div>
-        <div style={{ height: "80%", width: "100%", overflowY: "auto" }}>
+        <div style={{height: '80%', width: '100%', overflowY: 'auto'}}>
           {myMicroblogs.map((myMicroblog, index) => (
             <div
               key={index}
               className="events-wrap-converse"
-              style={{ cursor: "pointer" }}
+              style={{cursor: 'pointer'}}
               onClick={() => openMicroblogFromList(myMicroblog)}
               aria-hidden="true"
             >

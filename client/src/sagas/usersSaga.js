@@ -1,7 +1,6 @@
-import { takeEvery, fork, call, put, select } from "redux-saga/effects";
-import * as types from "../actions/action_types/users";
-import * as api from "../api/users";
-import * as helper from "../helpers/utils";
+import {takeEvery, fork, call, put, select} from 'redux-saga/effects';
+import * as types from '../actions/action_types/users';
+import * as api from '../api/users';
 const auth = (state) => state.auth;
 
 const sess_id = (state) => state.auth.sess._id;

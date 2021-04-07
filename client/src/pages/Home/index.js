@@ -1,13 +1,7 @@
-import React, {
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-  useEffect,
-} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import React, {useState, useRef, useCallback, useMemo, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link, useHistory} from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 
 import MapGL, {
   NavigationControl,
@@ -15,43 +9,43 @@ import MapGL, {
   Source,
   Layer,
   Popup,
-} from "react-map-gl";
+} from 'react-map-gl';
 
 import {
   navControlStyle,
   getControlStyle,
   countiesLayer,
   highlightLayer,
-} from "./map-style";
+} from './map-style';
 
-import Geocoder from "react-map-gl-geocoder";
-import { MAPBOX_TOKEN } from "../../constants";
+import Geocoder from 'react-map-gl-geocoder';
+import {MAPBOX_TOKEN} from '../../constants';
 
 // load helper
-import { getArrayOfGeoJSON } from "../../helpers/utils";
+import {getArrayOfGeoJSON} from '../../helpers/utils';
 
-import "mapbox-gl/dist/mapbox-gl.css";
-import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import 'mapbox-gl/dist/mapbox-gl.css';
+import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 // import MapCustom from './mapCustom';
-import requireAuth from "../../hoc/requireAuth";
-import { setTitle } from "../../actions/commonAction";
-import { getAllMicroBlogs } from "../../actions/microblogAction";
-import { getAllUsers } from "../../actions/userActions";
-import { getAllEvents } from "../../actions/eventAction";
+import requireAuth from '../../hoc/requireAuth';
+import {setTitle} from '../../actions/commonAction';
+import {getAllMicroBlogs} from '../../actions/microblogAction';
+import {getAllUsers} from '../../actions/userActions';
+import {getAllEvents} from '../../actions/eventAction';
 
-import online from "../../assets/img/contact-online.png";
-import offline from "../../assets/img/contact-idle.png";
-import upload_photo from "../../assets/img/upload-photo.png";
-import "./styles.scss";
+import online from '../../assets/img/contact-online.png';
+import offline from '../../assets/img/contact-idle.png';
+import upload_photo from '../../assets/img/upload-photo.png';
+import './styles.scss';
 
 const Home = () => {
   const auth = useSelector((state) => state.auth);
   const history = useHistory();
-  const [viewState, setViewState] = useState("users");
+  const [viewState, setViewState] = useState('users');
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setTitle("Home"));
+    dispatch(setTitle('Home'));
     dispatch(getAllMicroBlogs());
     dispatch(getAllUsers());
     dispatch(getAllEvents());
@@ -69,11 +63,11 @@ const Home = () => {
     zoom: 12,
   });
   const [geojson, setGeoJson] = useState({
-    type: "FeatureCollection",
+    type: 'FeatureCollection',
     features: getArrayOfGeoJSON(users),
   });
-  const getCursor = ({ isHovering, isDragging }) => {
-    return isDragging ? "grabbing" : isHovering ? "pointer" : "default";
+  const getCursor = ({isHovering, isDragging}) => {
+    return isDragging ? 'grabbing' : isHovering ? 'pointer' : 'default';
   };
 
   const mapRef = useRef();
@@ -82,26 +76,10 @@ const Home = () => {
       newViewport.longitude = 0;
     }
     setViewport(newViewport);
-    // const usersOnMap = mapRef.current.queryRenderedFeatures();
-    // if (usersOnMap) {
-    //   const uniqueUsers = getUniqueIcons(usersOnMap);
-    //   for (let i = 0; i < uniqueUsers.length; i++) {
-    //     for (let j = 0; j < users.length; j++) {
-    //       if (uniqueUsers[i].properties.user_id === users[j]._id) {
-    //         finalUsers.push(users[j]);
-    //         break;
-    //       }
-    //     }
-    //   }
-    // }
-    // setGeoJson({
-    //   type: "FeatureCollection",
-    //   features: getArrayOfGeoJSON(finalUsers),
-    // });
   }, []);
 
   const handleGeocoderViewportChange = useCallback((newViewport) => {
-    const geocoderDefaultOverrides = { transitionDuration: 1000 };
+    const geocoderDefaultOverrides = {transitionDuration: 1000};
     return handleViewportChange({
       ...newViewport,
       ...geocoderDefaultOverrides,
@@ -121,22 +99,22 @@ const Home = () => {
     const user = event.features && event.features[0];
     history.push(`/profile/${user.properties.user_id}`);
   });
-  const selectedCounty = (hoverInfo && hoverInfo.countyName) || "";
-  const filter = useMemo(() => ["in", "user_icon", selectedCounty], [
+  const selectedCounty = (hoverInfo && hoverInfo.countyName) || '';
+  const filter = useMemo(() => ['in', 'user_icon', selectedCounty], [
     selectedCounty,
   ]);
   return (
     <>
-      <Navbar />
+      <Navbar title="Home" />
       <div className="home-page">
         {!auth.isAuthenticated ? (
           <div>
             <p>
-              Welcome guest!{" "}
+              Welcome guest!{' '}
               <Link className="bold" to="/login">
                 Log in
-              </Link>{" "}
-              or{" "}
+              </Link>{' '}
+              or{' '}
               <Link className="bold" to="/register">
                 Register
               </Link>
@@ -146,7 +124,7 @@ const Home = () => {
           <div className="h-100 w-100">
             <div
               className="hidden-xs"
-              style={{ width: "80%", height: "80%", marginTop: "58px" }}
+              style={{width: '80%', height: '80%', marginTop: '58px'}}
             >
               <MapGL
                 ref={mapRef}
@@ -158,7 +136,7 @@ const Home = () => {
                 longitude={viewport.longitude}
                 onHover={onHover}
                 onClick={onClick}
-                interactiveLayerIds={["user_icon"]}
+                interactiveLayerIds={['user_icon']}
                 mapStyle="https://api.maptiler.com/maps/positron/style.json?key=RGierAHokphISswP6JTB"
                 mapboxApiAccessToken={MAPBOX_TOKEN}
               >
@@ -180,7 +158,7 @@ const Home = () => {
                     className="county-info"
                   >
                     <div
-                      dangerouslySetInnerHTML={{ __html: selectedCounty }}
+                      dangerouslySetInnerHTML={{__html: selectedCounty}}
                     ></div>
                   </Popup>
                 )}
@@ -190,7 +168,7 @@ const Home = () => {
               </MapGL>
             </div>
             <div
-              style={{ width: "100%", height: "66%", marginTop: "58px" }}
+              style={{width: '100%', height: '66%', marginTop: '58px'}}
               className="visible-xs-block"
             >
               <MapGL
@@ -200,7 +178,7 @@ const Home = () => {
                 height="400px"
                 onViewportChange={handleViewportChange}
                 onHover={onHover}
-                interactiveLayerIds={["user_icon"]}
+                interactiveLayerIds={['user_icon']}
                 mapStyle="https://api.maptiler.com/maps/positron/style.json?key=RGierAHokphISswP6JTB"
                 mapboxApiAccessToken={MAPBOX_TOKEN}
               >
@@ -222,7 +200,7 @@ const Home = () => {
                     className="county-info"
                   >
                     <div
-                      dangerouslySetInnerHTML={{ __html: selectedCounty }}
+                      dangerouslySetInnerHTML={{__html: selectedCounty}}
                     ></div>
                   </Popup>
                 )}
@@ -234,9 +212,9 @@ const Home = () => {
 
             <div className="hidden-xs e-box">
               <h2 className="amount-of-microblogs">
-                {viewState === "users" ? `Users ${users.length} ` : ""}
-                {viewState === "events" ? "Events" : ""}
-                {viewState === "blogs" ? "Microblogs" : ""}
+                {viewState === 'users' ? `Users ${users.length} ` : ''}
+                {viewState === 'events' ? 'Events' : ''}
+                {viewState === 'blogs' ? 'Microblogs' : ''}
               </h2>
               {users.map((user) => (
                 <div
@@ -253,7 +231,7 @@ const Home = () => {
                     <div className="frnds-status-info-div">
                       <img
                         src={user.is_online ? online : offline}
-                        style={{ width: "40%", borderRadius: "50%" }}
+                        style={{width: '40%', borderRadius: '50%'}}
                       />
                     </div>
                   </div>
@@ -281,13 +259,13 @@ const Home = () => {
               <h2
                 className="amount-of-microblogs"
                 style={{
-                  backgroundColor: "#6148a1",
-                  color: "white",
+                  backgroundColor: '#6148a1',
+                  color: 'white',
                 }}
               >
-                {viewState === "users" ? "Users" : ""}
-                {viewState === "events" ? "Events" : ""}
-                {viewState === "blogs" ? "Microblogs" : ""}
+                {viewState === 'users' ? 'Users' : ''}
+                {viewState === 'events' ? 'Events' : ''}
+                {viewState === 'blogs' ? 'Microblogs' : ''}
               </h2>
               <div className="events-wrap-view">
                 <div className="col-md-2 col-sm-2 col-xs-2 colPadZero">
@@ -319,8 +297,8 @@ const Home = () => {
                 <div className="dropdown">
                   <a
                     className="btn float-btn-wrap"
-                    onClick={() => setViewState("users")}
-                    onMouseOver={() => setViewState("users")}
+                    onClick={() => setViewState('users')}
+                    onMouseOver={() => setViewState('users')}
                   >
                     <img
                       src="img/prof-float-ico.png"
@@ -335,8 +313,8 @@ const Home = () => {
                   <button
                     className="btn  popper float-btn-wrap"
                     type="button"
-                    onClick={() => setViewState("events")}
-                    onMouseOver={() => setViewState("events")}
+                    onClick={() => setViewState('events')}
+                    onMouseOver={() => setViewState('events')}
                   >
                     <img
                       src="img/loc-float-ico.png"
@@ -350,8 +328,8 @@ const Home = () => {
                   <button
                     className="btn  float-btn-wrap"
                     type="button"
-                    onClick={() => setViewState("blogs")}
-                    onMouseOver={() => setViewState("blogs")}
+                    onClick={() => setViewState('blogs')}
+                    onMouseOver={() => setViewState('blogs')}
                   >
                     <img
                       src="img/chat-float-ico.png"
