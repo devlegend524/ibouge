@@ -1,17 +1,20 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link, useHistory} from 'react-router-dom';
 
-import { logOutUser } from "../../actions/authActions";
-import DropForm from "../DropForm";
-import "./styles.scss";
+import {logOutUser} from '../../actions/authActions';
+import {setTitle} from '../../actions/commonAction';
 
-import logo from "../../assets/img/ibouge-home-logo.png";
-import inboxEmpty from "../../assets/img/inbox-empty.png";
-import notificationEmtpy from "../../assets/img/notification-empty.png";
-import emptyUser from "../../assets/img/upload-photo.png";
+import DropForm from '../DropForm';
+import './styles.scss';
 
-const Navbar = () => {
+import logo from '../../assets/img/ibouge-home-logo.png';
+import inboxEmpty from '../../assets/img/inbox-empty.png';
+import notificationEmtpy from '../../assets/img/notification-empty.png';
+import emptyUser from '../../assets/img/upload-photo.png';
+
+const Navbar = (props) => {
+  const [pageTitle, setPageTitle] = useState(props.title);
   const [showMailDrop, setShowMailDrop] = useState(false);
   const [showNotificationDrop, setShowNotificationDrop] = useState(false);
   const [showMenuDrop, setShowMenuDrop] = useState(false);
@@ -23,9 +26,11 @@ const Navbar = () => {
   const onLogOut = (event) => {
     // event.preventDefault();
     dispatch(logOutUser());
-    history.push("/login");
+    history.push('/login');
   };
-
+  useEffect(() => {
+    dispatch(setTitle(pageTitle));
+  }, [pageTitle, dispatch]);
   return (
     <nav className="navbar navbar-default navbar-fixed-top">
       <div className="container-fluid">
@@ -38,9 +43,9 @@ const Navbar = () => {
             aria-controls="#bs-example-navbar-collapse-1"
             aria-expanded="false"
             style={{
-              marginTop: "8px",
-              marginBottom: "0px",
-              marginRight: "15px",
+              marginTop: '8px',
+              marginBottom: '0px',
+              marginRight: '15px',
             }}
           >
             <span className="sr-only">Toggle navigation</span>
@@ -155,8 +160,8 @@ const Navbar = () => {
                   <ul
                     className={
                       showMenuDrop
-                        ? "dropdown-menu showMenuDrop"
-                        : "dropdown-menu"
+                        ? 'dropdown-menu showMenuDrop'
+                        : 'dropdown-menu'
                     }
                     aria-labelledby="dropdownMenu1"
                     role="menu"
@@ -174,7 +179,7 @@ const Navbar = () => {
                       <Link to="/myprofilesettings">Notifications</Link>
                     </li>
                     <li className="divider hidden-xs"></li>
-                    <li style={{ cursor: "pointer" }}>
+                    <li style={{cursor: 'pointer'}}>
                       <a onClick={() => onLogOut()}>Sign Out</a>
                     </li>
                   </ul>

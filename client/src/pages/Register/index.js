@@ -1,59 +1,59 @@
-import React, { useEffect } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
+import React, {useEffect} from 'react';
+import {Link, Redirect, useHistory} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {useFormik} from 'formik';
 
-import SocialAuth from "../../components/SocialAuth";
-import { InputControl, SelectControl } from "../../components/Inputs";
-import Footer from "../../components/Footer";
+import SocialAuth from '../../components/SocialAuth';
+import {InputControl, SelectControl} from '../../components/Inputs';
+import Footer from '../../components/Footer';
 
-import { setTitle } from "../../actions/commonAction";
+import {setTitle} from '../../actions/commonAction';
 import {
   registerUserWithEmail,
   registerResendEmail,
-} from "../../actions/registerActions";
+} from '../../actions/registerActions';
 
-import { registerSchema } from "./validation";
-import { gender, dob } from "./util";
+import {registerSchema} from './validation';
+import {gender, dob} from './util';
 
-import "./styles.scss";
+import './styles.scss';
 
-import logo from "../../assets/img/ibouge-logo.png";
+import logo from '../../assets/img/ibouge-logo.png';
 
 const Register = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { error } = useSelector((state) => state.register);
+  const {error} = useSelector((state) => state.register);
   const auth = useSelector((state) => state.auth);
   const register = useSelector((state) => state.register);
   useEffect(() => {
-    dispatch(setTitle("Register"));
+    dispatch(setTitle('Register'));
   }, []);
   const formik = useFormik({
     initialValues: {
-      fname: "",
-      lname: "",
-      gender: "",
-      mm: "",
-      dd: "",
-      yyyy: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      fname: '',
+      lname: '',
+      gender: '',
+      mm: '',
+      dd: '',
+      yyyy: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
     validationSchema: registerSchema,
     onSubmit: (values) => {
       const data = {
         ...values,
-        dob: new Date(values.yyyy + "-" + values.mm + "-" + values.dd),
+        dob: new Date(values.yyyy + '-' + values.mm + '-' + values.dd),
       };
       dispatch(registerUserWithEmail(data));
-      if (!error) history.push("/profile_setup/step1");
+      if (!error) history.push('/profile_setup/step1');
     },
   });
 
   const resendEmail = () => {
-    dispatch(registerResendEmail({ email: formik.values.email }));
+    dispatch(registerResendEmail({email: formik.values.email}));
   };
 
   if (auth.isAuthenticated) return <Redirect to="/" />;
@@ -73,24 +73,24 @@ const Register = () => {
                 <div className="login-box">
                   {!register.isLoading && (
                     <>
-                      {register.message && register.state === "success" && (
+                      {register.message && register.state === 'success' && (
                         <span className="login-success-msg">
-                          {register.message}{" "}
+                          {register.message}{' '}
                           <span onClick={resendEmail} aria-hidden="true">
                             Resend
-                          </span>{" "}
+                          </span>{' '}
                           link.
                         </span>
                       )}
-                      {register.state === "failure" && (
+                      {register.state === 'failure' && (
                         <>
                           {register.message ===
-                          "Please check your email to validate your address." ? (
+                          'Please check your email to validate your address.' ? (
                             <span className="login-error-msg">
-                              {register.message}{" "}
+                              {register.message}{' '}
                               <a onClick={resendEmail} aria-hidden="true">
                                 Resend
-                              </a>{" "}
+                              </a>{' '}
                               email.
                             </span>
                           ) : (

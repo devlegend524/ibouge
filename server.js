@@ -19,25 +19,46 @@ var flash = require('connect-flash');
 var mongoose = require('mongoose'); //for mongodb, database
 
 //var consolidate = require('consolidate');
-var models_user = require('./models/user.js'); // refering models in server.js
-var models_chats = require('./models/chat.js');
-var models_notification = require('./models/notification.js');
-var models_friend = require('./models/friend.js');
-var models_microblog = require('./models/microblog.js');
-var models_event = require('./models/event.js');
-var models_statusUpdate = require('./models/statusUpdates.js');
+var models_user = require('./server/models/user.js'); // refering models in server.js
+var models_chats = require('./server/models/chat.js');
+var models_notification = require('./server/models/notification.js');
+var models_friend = require('./server/models/friend.js');
+var models_microblog = require('./server/models/microblog.js');
+var models_event = require('./server/models/event.js');
+var models_statusUpdate = require('./server/models/statusUpdates.js');
 
-var mailer = require('./services/mailer.js'); // email
+var mailer = require('./server/services/mailer.js'); // email
 
 //var user_ctrl = require('./server/controllers/user.js');
 
+// // db connection
+// var dbHost = process.env.SERVER_DEV == 1 ? "localhost" : "localhost";
+// var dbPort = process.env.SERVER_DEV == 1 ? 27018 : 27017;
+// mongoose.Promise = Promise;
+// mongoose.connect("mongodb://" + dbHost + ":" + dbPort + "/ibouge");
+
+// //tell node the global configuration about parser,logger and passport
+// app.use(cookieParser());
+// app.use(logger("dev")); // logs all requests to the server side console
+// app.use(
+//   session({
+//     secret: "a451b603ffdab9681a700cb8d484492d5a7fcb9acad9156e5cd06f27390cd3c0fb5123deac736c4d6daf716f97f09eec",
+//     resave: true,
+//     saveUninitialized: false,
+//     store: new MongoStore({
+//       mongoUrl: "mongodb://" + dbHost + ":" + dbPort + "/ibouge",
+//     }),
+//     secret: ")F*0fweofih0(F*H98hwef",
+//   }),
+// );
 // db connection
 var dbHost = process.env.SERVER_DEV == 1 ? 'localhost' : 'localhost';
 var dbPort = process.env.SERVER_DEV == 1 ? 27018 : 27017;
 mongoose.Promise = Promise;
 mongoose
   .connect(
-    'mongodb+srv://erosbalto:admin524@cluster0.h0d3t.mongodb.net/ibouge?retryWrites=true&w=majority',
+    'mongodb+srv://erosbalto:admin524ABC@cluster0.h0d3t.mongodb.net/ibouge?retryWrites=true&w=majority',
+    // 'mongodb://' + dbHost + ':' + dbPort + '/ibouge',
     {
       useNewUrlParser: true,
       useCreateIndex: true,
@@ -59,7 +80,11 @@ app.use(
       'a451b603ffdab9681a700cb8d484492d5a7fcb9acad9156e5cd06f27390cd3c0fb5123deac736c4d6daf716f97f09eec',
     resave: true,
     saveUninitialized: false,
-    store: MongoStore.create({mongoUrl: 'mongodb://localhost:27017/ibouge'}),
+    store: MongoStore.create({
+      mongoUrl:
+        // 'mongodb://' + dbHost + ':' + dbPort + '/ibouge',
+        'mongodb+srv://erosbalto:admin524ABC@cluster0.h0d3t.mongodb.net/ibouge?retryWrites=true&w=majority',
+    }),
     secret: ')F*0fweofih0(F*H98hwef',
   })
 );
@@ -70,30 +95,32 @@ app.use(passport.initialize()); //initializing passport
 
 app.use(passport.session()); //initializing passport session
 //import the routers
-var router = require('./routes/router');
-var authenticate = require('./routes/authentication')(passport);
-var socialAuthenticate = require('./routes/socialAuthentication')(passport);
-var userRoute = require('./routes/user');
-var filterRoute = require('./routes/filter');
-var chatRoute = require('./routes/chat');
-var myDashboardRoute = require('./routes/myDashboard');
-var microblogRoute = require('./routes/microblog');
-var eventRoute = require('./routes/event');
-var emailRoute = require('./routes/email');
-var statusRoute = require('./routes/status.js');
-var amazonBucketRoute = require('./routes/s3bucket.js');
+var router = require('./server/routes/router');
+var authenticate = require('./server/routes/authentication')(passport);
+var socialAuthenticate = require('./server/routes/socialAuthentication')(
+  passport
+);
+var userRoute = require('./server/routes/user');
+var filterRoute = require('./server/routes/filter');
+var chatRoute = require('./server/routes/chat');
+var myDashboardRoute = require('./server/routes/myDashboard');
+var microblogRoute = require('./server/routes/microblog');
+var eventRoute = require('./server/routes/event');
+var emailRoute = require('./server/routes/email');
+var statusRoute = require('./server/routes/status.js');
+var amazonBucketRoute = require('./server/routes/s3bucket.js');
 
 // import controllers
-var chatCtrl = require('./controllers/chat');
-var microblogCtrl = require('./controllers/microblog');
-var eventCtrl = require('./controllers/event');
-var statusCtrl = require('./controllers/status.js');
-var s3BucketCtrl = require('./controllers/amazonBucketController.js');
+var chatCtrl = require('./server/controllers/chat');
+var microblogCtrl = require('./server/controllers/microblog');
+var eventCtrl = require('./server/controllers/event');
+var statusCtrl = require('./server/controllers/status.js');
+var s3BucketCtrl = require('./server/controllers/amazonBucketController.js');
 
 //tell node that My application will use ejs engine for rendering, view engine setup
-// app.set("views", path.join(__dirname, "/views"));
-// app.engine("html", require("ejs").renderFile);
-// app.set("view engine", "html");
+app.set('views', path.join(__dirname, '/server/views'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 //tell node about these directories that application may get resources from
 app.use('/', router);
@@ -115,23 +142,39 @@ app.use('/s3Bucket', amazonBucketRoute);
 //   // }
 // });
 
+app.use(express.static(path.join(__dirname, 'user')));
+app.use(express.static(path.join(__dirname, 'user/controllers')));
+app.use(express.static(path.join(__dirname, 'user/services')));
+app.use(express.static(path.join(__dirname, 'user/directives')));
+app.use(express.static(path.join(__dirname, 'user/filters')));
+app.use(express.static(path.join(__dirname, 'user/views')));
+app.use(express.static(path.join(__dirname, 'user/assets')));
+app.use(express.static(path.join(__dirname, 'user/assets/js')));
+app.use(express.static(path.join(__dirname, 'user/assets/css')));
+app.use(express.static(path.join(__dirname, 'user/assets/img')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/js')));
+app.use(express.static(path.join(__dirname, 'public/css')));
+app.use(express.static(path.join(__dirname, 'public/img')));
+app.use(express.static(path.join(__dirname, 'upload')));
+
 //providing auth-api to passport so that it can use it.
-var initPassport = require('./controllers/passport-init');
+var initPassport = require('./server/controllers/passport-init');
 initPassport(passport);
 
 //running server on node
 
 // Charlie changed was port 80
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, './client/build')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build'));
+  res.sendFile(path.join(__dirname, './client/build'));
 });
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
+var server = app.listen(port, () => {
   console.log(`Server started on port ${port}`);
-
   var io = require('socket.io').listen(server);
+  console.log('start socket io');
   var Chat = mongoose.model('Chat');
   var User = mongoose.model('User');
   var Microblog = mongoose.model('Microblog');
@@ -299,6 +342,7 @@ app.listen(port, () => {
   };
 
   io.sockets.on('connection', function (socket) {
+    console.log('try to connect socket io');
     // callback function for socket.on('disconnect')
     function disconnect() {
       updateUserAvailability(socket.clientID, false);

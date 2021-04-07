@@ -1,0 +1,636 @@
+.content-area {
+        padding-top: 56px;
+    }
+
+    /*font for entire page*/
+    .chosen-font {
+        font-family: "Open Sans", X-LocaleSpecific, sans-serif;
+    }
+
+
+    /*this is the title on top of the form*/
+    .profile-set-head {
+        margin-top: 40px;
+        font-weight: lighter;
+    }
+
+    /*this is the left side of the form in the first step*/
+    /* .left-small-group {
+        width: 27%;
+        margin-left: 20%;
+    } */
+
+    /*style for all label tags*/
+    label {
+        color: #949aa6;
+        margin-top: 10px;
+        font-weight: lighter;
+        font-size: 15px;
+    }
+
+    /*style for all input labels*/
+    input {
+        border-radius: 3px;
+    }
+
+    /* 
+    .input {
+        width: 90%;
+        height: 6%;
+        font-size: 115%;
+        font-weight: lighter;
+    } */
+
+    .other-input-style {
+        width: 100%;
+        height: 6%;
+        font-size: 115%;
+    }
+
+    /*these are the classes that makes the input fields red if invalid*/
+
+    input.submitted.ng-invalid {
+        border: 1px solid #f00;
+    }
+
+    select.submitted.ng-invalid {
+        border: 1px solid #f00;
+    }
+
+    textarea.submitted.ng-invalid {
+        border: 1px solid #f00;
+    }
+
+    /*this makes the gray shadow inside category input field in safari go away,downside is it also makes the arrows disappear*/
+
+    .category {
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+    }
+
+
+    /* style for calendar icon placeholder and calendar-popup*/
+    input.calendar-icon::placeholder {
+        font-family: FontAwesome, 'Merriweather Sans', sans-serif;
+        color: #c7cbd4;
+        font-size: 100%;
+        font-weight: lighter;
+    }
+
+    input.calendar-icon::-webkit-input-placeholder {
+        text-align: right;
+    }
+
+    input.calendar-icon:-moz-placeholder {
+        /* Firefox 18- */
+        text-align: right;
+    }
+
+    input.calendar-icon::-moz-placeholder {
+        /* Firefox 19+ */
+        text-align: right;
+    }
+
+    input.calendar-icon:-ms-input-placeholder {
+        text-align: right;
+    }
+
+    .btn.btn-sm.btn-info.uib-datepicker-current {
+        /*content: 'Apply';*/
+        visibility: visible;
+        padding: 6px 27px;
+        font-weight: lighter;
+        color: #FFFFFF;
+        background-color: #62439c;
+        text-transform: uppercase;
+        border-radius: 3px;
+        width: 175%
+    }
+
+    .uib-datepicker-popup.dropdown-menu {
+        border: none;
+        background-color: #fafbfc;
+        padding: 30px 30px 0 30px;
+        /*font-family: SFUIDisplay-Light, HelveticaNeue-Light, "Segoe UI Semilight",sans-serif-light;*/
+    }
+
+    /* .datpicker .text-info contains text for today's date but
+           it dosn't work when we are not showing the current month */
+    .uib-daypicker {
+        background-color: #fafbfc;
+    }
+
+    .uib-clear {
+        visibility: hidden;
+    }
+
+    .uib-close {
+        visibility: hidden;
+    }
+
+    thead tr th small {
+        font-weight: lighter;
+        text-transform: uppercase;
+        font-size: 75%;
+        color: #808ca5;
+    }
+
+    thead tr th button strong {
+        font-weight: 100;
+        text-transform: uppercase;
+        color: black;
+    }
+
+    thead tr th {
+        padding-top: 15px;
+    }
+
+    .glyphicon.glyphicon-chevron-left::before {
+        visibility: hidden;
+    }
+
+    .glyphicon.glyphicon-chevron-left::after {
+        font-family: 'FontAwesome';
+        visibility: visible;
+        content: "\f0d9";
+        font-size: 20px;
+    }
+
+    .glyphicon.glyphicon-chevron-right::before {
+        visibility: hidden;
+    }
+
+    .glyphicon.glyphicon-chevron-right::after {
+        font-family: 'FontAwesome';
+        visibility: visible;
+        content: "\f0da";
+        font-size: 20px;
+        color: black;
+    }
+
+    .uib-button-bar {
+        padding: 10px 0 4px 0;
+    }
+
+    .btn.btn-default.btn-sm.btn-info.active {
+        font-size: 14px;
+        font-weight: normal;
+        color: #FFFFFF;
+        background-color: #FAA14B;
+        /*border: none;*/
+        border-radius: 50%;
+    }
+
+    .btn.btn-default.btn-sm.active {
+        font-size: 14px;
+        font-weight: normal;
+        color: #FFFFFF;
+        /*border: none;*/
+        border-radius: 50%;
+    }
+
+    .uib-datepicker-popup .text-info {
+        border: none;
+        font-size: 14px;
+        color: #808ca5;
+    }
+
+    /* .datpicker .btn-info contains selected date */
+    .uib-datepicker-popup .btn-info {
+        font-size: 14px;
+        font-weight: normal;
+        background-color: #FAA14B;
+        color: #FFFFFF;
+    }
+
+    .uib-datepicker-popup .btn:disabled {
+        font-size: 14px;
+        font-weight: normal;
+        color: gray;
+        border: none;
+    }
+
+    .uib-datepicker-popup .btn:disabled>.text-muted {
+        font-size: 14px;
+        font-weight: normal;
+        color: gray;
+        border: none;
+    }
+
+    .uib-datepicker-popup .text-muted {
+        font-size: 14px;
+        font-weight: normal;
+        color: #808ca5;
+        border: none;
+    }
+
+    .uib-datepicker-popup .btn:enabled {
+        font-size: 14px;
+        font-weight: normal;
+        color: #808ca5;
+        border: none;
+    }
+
+    .btn-default.active {
+        background-color: #FAA14B;
+    }
+
+    .btn-default.active span {
+        background-color: #FAA14B;
+        color: #FFFFFF;
+    }
+
+    .uib-datepicker-popup .text-info.active {
+        border: none;
+        font-size: 14px;
+        color: white;
+    }
+
+    .btn:focus {
+        outline: 0;
+        outline-offset: 0;
+    }
+
+    .btn-default:focus {
+        background-color: #FFFFFF;
+    }
+
+    .btn-default:hover {
+        background-color: #FFFFFF;
+    }
+
+    /*end of style for calendar-popup*/
+
+    /*div that holds start&end times*/
+
+    .start-end-div {
+        display: -webkit-box;
+    }
+
+    .start-time-div {
+        width: 50%;
+    }
+
+    .end-time-div {
+        width: 45%;
+    }
+
+    div.start-time {
+        width: 92%;
+        border-radius: 3px;
+    }
+
+    div.start-time.submitted.ng-invalid {
+        border: 1px solid #f00;
+    }
+
+    div.end-time.submitted.ng-invalid {
+        border: 1px solid #f00;
+        border-radius: 3px;
+    }
+
+    .uib-time input {
+        border: none;
+        font-size: 100%;
+        font-weight: lighter;
+    }
+
+    .uib-time.hours {
+        padding-left: 5px;
+    }
+
+    button.btn.btn-default.text-center {
+        border: none;
+        font-weight: lighter;
+    }
+
+    table.uib-timepicker {
+        border-spacing: unset;
+        border-collapse: unset;
+        border: 1px solid #dadce8;
+        border-radius: 3px;
+        height: 6%;
+        width: 100%;
+    }
+
+    table.uib-timepicker:focus-within {
+        border-spacing: unset;
+        border-collapse: unset;
+        border-color: #66afe9;
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    }
+
+    input.form-control.text-center:focus {
+        border-color: unset;
+        outline: none;
+        -webkit-box-shadow: none;
+        box-shadow: unset;
+    }
+
+    /*event-description div*/
+
+    /* .event-description-div {
+        width: 33.5%;
+    } */
+
+    .textarea {
+        width: 100%;
+        resize: none;
+        font-size: 115%;
+        font-weight: lighter;
+    }
+
+    /*style for the column that holds the event image*/
+    .column-for-img {
+        cursor: pointer;
+        margin-left: 19%;
+        margin-top: 3%;
+    }
+
+    /*style for box for event image*/
+
+    .form-box {
+        /* height: 25%; */
+    }
+
+    .box-big-text {
+        color: #949aab;
+        font-size: 30px;
+        font-weight: lighter;
+        text-align: center;
+    }
+
+    .box-small-text {
+        color: #949aab;
+        padding-left: 30%;
+        padding-top: 2%;
+        font-size: 20px;
+    }
+
+    .box__uploading,
+    .box__success,
+    .box__error {
+        display: none;
+    }
+
+    .box__file {
+        visibility: hidden;
+    }
+
+    .box .has-advanced-upload {
+        outline: 2px dashed #ebedf0;
+        /* outline-offset: -10px; */
+        -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+        transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    }
+
+    .box.has-advanced-upload .box__dragndrop {
+        display: inline;
+    }
+
+    .box {
+        font-size: 1.25rem;
+        background-color: #FFFFFF;
+        position: relative;
+        padding: 100px 20px;
+    }
+
+    .box.has-advanced-upload {
+        background-color: white;
+        outline: 2px dashed #ebedf0;
+        outline-offset: -10px;
+        border: 2px solid #ebedf0;
+    }
+
+    .box.has-advanced-upload .box__dragndrop {
+        display: inline;
+    }
+
+    .box__file+label:hover strong,
+    .box__file:focus+label strong,
+    .box__file.has-focus+label strong {
+        color: #62439c;
+    }
+
+    .box.has-advanced-upload.green-dash {
+        background-color: white;
+        outline: 2px dashed #31db91;
+        outline-offset: 10px;
+        border: 2px solid #31db91;
+    }
+
+    .box.has-advanced-upload.green-dash.prev-img-there {
+        background-color: white;
+        outline: 2px dashed #31db91;
+        outline-offset: 10px;
+        border: 2px solid #31db91;
+    }
+
+    /*end of style for box for event picture*/
+
+    /*this style is applied when an event image is set*/
+
+    .img-div-margin {
+        cursor: pointer;
+        margin-left: 19%;
+        margin-top: 3%
+    }
+
+    .form-border {
+        padding: 0;
+        height: 27%;
+        width: 93.5%;
+        border: 2px solid #ebedf0;
+        ;
+        outline: 2px dashed #ebedf0;
+        outline-offset: 10px;
+    }
+
+    .event-img {
+        height: 100%;
+        width: 100%
+    }
+
+    /*next step div*/
+
+    .next-step-button {
+        color: #FFFFFF;
+        background-color: #62439c;
+        width: 55%;
+        height: 7%;
+        border-radius: 5px;
+    }
+
+    /*beginning of style for step-2*/
+
+    /*arrow to go back to step-1*/
+
+    .back-arrow {
+        padding: 20px;
+        position: absolute;
+        left: 4%;
+        border: none;
+        top: 20%;
+        bottom: 35%;
+    }
+
+    .arrow-icon {
+        position: relative;
+        top: 45%;
+        left: -132%;
+        width: 150%;
+        height: 17%;
+        border: none;
+        font-size: 150%;
+        color: #959ba7;
+    }
+
+    .step-two-div {
+        display: -webkit-inline-flex;
+        height: 560px;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /*style for the map*/
+
+    #event-location-map {
+        height: 400px;
+        width: 600px;
+    }
+
+    /*this separates the map from the form*/
+
+    .divider {
+        padding: 20px;
+        position: absolute;
+        left: 47%;
+        top: 20%;
+        bottom: 35%;
+        border-left: 2px solid #e4e6ef;
+    }
+
+    .or-button {
+        position: relative;
+        top: 45%;
+        left: -132%;
+        width: 150%;
+        height: 17%;
+        border-radius: 50%;
+        border: none;
+        font-size: 115%;
+        color: #959ba7;
+        box-shadow: 0 1px 6px 0;
+    }
+
+    /*div that holds location-form*/
+
+    .location-form-div {
+        width: 33.5%;
+        padding-left: 50px;
+    }
+
+
+    /*div that holds country and state inputs*/
+
+    .country-state-div {
+        display: -webkit-box
+    }
+
+    .country-div {
+        width: 55%;
+    }
+
+    .state-div {
+        width: 45%;
+    }
+
+    /*div that holds city and zip inputs*/
+
+    .city-zip-div {
+        display: -webkit-box
+    }
+
+    .city-div {
+        width: 55%;
+    }
+
+    .zip-div {
+        width: 45%;
+    }
+
+
+    /*div that holds the create even button*/
+
+    .create-event-column {}
+
+    .create-event-button {
+        width: 600px;
+        height: 50px;
+        margin-top: 50px;
+        color: #FFFFFF;
+        background-color: #62439c;
+        border-radius: 10px;
+    }
+
+    /*eliminate outline ring around button when focused*/
+    .create-event-button:focus {
+        outline: none;
+    }
+
+    #mapWrapper {
+        width: 600px;
+        height: 560px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #createEventGeocoder {
+        height: 50px;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    #createEventGeocoder .mapboxgl-ctrl-geocoder {
+        width: 100%;
+        height: 50px;
+        max-width: 100%;
+    }
+
+    #createEventGeocoder .mapboxgl-ctrl-geocoder input[type=text] {
+        font-size: large;
+        margin-top: 5px;
+    }
+
+    #createEventGeocoder .mapboxgl-ctrl-geocoder span.geocoder-icon-search {
+        top: 15px;
+        left: 15px;
+    }
+
+    #createEventGeocoder .mapboxgl-ctrl-geocoder ul {
+        font-size: large;
+    }
+
+    .inputfile {
+        width: 10%;
+        height: 100%;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+        cursor: pointer;
+    }
+
+    .spinner__container {
+        background-color: rgba(97, 72, 161, 0.32);
+        border-radius: 10px;
+        height: 100%;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        z-index: 3;
+    }
