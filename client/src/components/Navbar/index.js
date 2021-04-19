@@ -1,36 +1,99 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link, useHistory} from 'react-router-dom';
+import useSocket from 'use-socket.io-client';
+import {socketUrl} from '../../constants';
+import DropForm from '../DropForm';
 
 import {logOutUser} from '../../actions/authActions';
 import {setTitle} from '../../actions/commonAction';
+import {loadMeta} from '../../actions/userActions';
+import {loadMyInbox} from '../../actions/inboxAction';
 
-import DropForm from '../DropForm';
+import {
+  newNotification,
+  loadNotifications,
+} from '../../actions/notificationAction';
+
 import './styles.scss';
 
 import logo from '../../assets/img/ibouge-home-logo.png';
 import inboxEmpty from '../../assets/img/inbox-empty.png';
+import inboxExist from '../../assets/img/inbox.png';
 import notificationEmtpy from '../../assets/img/notification-empty.png';
+import notificationExist from '../../assets/img/notification.png';
 import emptyUser from '../../assets/img/upload-photo.png';
 
 const Navbar = (props) => {
-  const [pageTitle, setPageTitle] = useState(props.title);
+  const [pageTitle] = useState(props.title);
+  const auth = useSelector((state) => state.auth);
+  const notifications = useSelector((state) => state.notification);
+  const inbox = useSelector((state) => state.inbox);
+
   const [showMailDrop, setShowMailDrop] = useState(false);
   const [showNotificationDrop, setShowNotificationDrop] = useState(false);
   const [showMenuDrop, setShowMenuDrop] = useState(false);
-  const auth = useSelector((state) => state.auth);
+  const [myInbox, setMyInbox] = useState(inbox);
+  const [myNotifications, setMyNotification] = useState(notifications);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const onLogOut = (event) => {
+  const [socket] = useSocket(socketUrl);
+  socket.connect();
+
+  const onLogOut = () => {
     // event.preventDefault();
     dispatch(logOutUser());
     history.push('/login');
   };
   useEffect(() => {
     dispatch(setTitle(pageTitle));
-  }, [pageTitle, dispatch]);
+    dispatch(loadNotifications());
+    dispatch(loadMyInbox());
+    let interval = setInterval(function () {
+      if (!auth.sess.is_online) {
+        socket.emit('addUserID', {
+          id: auth.sess._id,
+        });
+        clearInterval(interval);
+      }
+    }, 3000);
+    socket.on('new-notification-to-show', function (event) {
+      dispatch(newNotification({hasmessage: true}));
+      dispatch(loadNotifications());
+      setMyNotification({
+        ...myNotifications,
+        hasNewMessage: true,
+      });
+    });
+    socket.on('newNotification', function (data) {
+      console.log('====recieved new notification====', data);
+      if (myNotifications.isOpen) {
+        dispatch(loadNotifications());
+      } else if (myInbox.isOpen) {
+        dispatch(loadNotifications());
+        dispatch(loadMyInbox());
+      } else {
+        dispatch(loadMeta());
+      }
+    });
+
+    socket.on('presence', function (presenceData) {
+      const newData = [...myInbox.data];
+      if (myInbox.data[0] && myInbox.data[0].users) {
+        for (let j = 0; j < myInbox.data.length; j++) {
+          for (let i = 0; i < myInbox.data[j].users.length; i++) {
+            if (myInbox.data[j].users[i].user_id === presenceData.user_id) {
+              newData[j].is_online = presenceData.status;
+              break;
+            }
+          }
+        }
+        setMyInbox({...myInbox, data: newData});
+      }
+    });
+  }, []);
   return (
     <nav className="navbar navbar-default navbar-fixed-top">
       <div className="container-fluid">
@@ -99,13 +162,17 @@ const Navbar = (props) => {
                     }}
                   >
                     <img
-                      src={inboxEmpty}
+                      src={myInbox.hasNewMessage ? inboxExist : inboxEmpty}
                       className="top-nav-icons btnd"
                       alt="inbox"
                     />
                   </button>
                   {showMailDrop && (
-                    <DropForm name="Inbox" cName="mail-dropdown" />
+                    <DropForm
+                      name="Inbox"
+                      data={myInbox}
+                      cName="mail-dropdown"
+                    />
                   )}
                 </div>
               </div>
@@ -123,7 +190,11 @@ const Navbar = (props) => {
                     }}
                   >
                     <img
-                      src={notificationEmtpy}
+                      src={
+                        myNotifications.hasNewMessage
+                          ? notificationExist
+                          : notificationEmtpy
+                      }
                       className="top-nav-icons"
                       alt="notification"
                     />
@@ -131,6 +202,7 @@ const Navbar = (props) => {
                   {showNotificationDrop && (
                     <DropForm
                       name="Notification"
+                      data={myNotifications}
                       cName="notification-dropdown"
                     />
                   )}
@@ -150,11 +222,17 @@ const Navbar = (props) => {
                     onClick={() => setShowMenuDrop(!showMenuDrop)}
                   >
                     <img
-                      src={emptyUser}
+                      src={
+                        auth.sess.profile_pic
+                          ? auth.sess.profile_pic
+                          : emptyUser
+                      }
                       className="top-nav-prof-icons"
                       alt="user"
                     />
-                    <span className="top-prof-name">Dev Man</span>
+                    <span className="top-prof-name">
+                      {auth.sess?.fname} {auth.sess?.lname}
+                    </span>
                     <span className="caret prof-name-drop-ico"></span>
                   </button>
                   <ul

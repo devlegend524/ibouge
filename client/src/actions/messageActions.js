@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { attachTokenToHeaders } from "./authActions";
+import {attachTokenToHeaders} from './authActions';
 import {
   GET_MESSAGES_LOADING,
   GET_MESSAGES_SUCCESS,
@@ -15,7 +15,7 @@ import {
   EDIT_MESSAGE_SUCCESS,
   EDIT_MESSAGE_FAIL,
   CLEAR_MESSAGE_ERROR,
-} from "./types";
+} from './action_types/message';
 
 export const getMessages = () => async (dispatch, getState) => {
   dispatch({
@@ -23,16 +23,16 @@ export const getMessages = () => async (dispatch, getState) => {
   });
   try {
     const options = attachTokenToHeaders(getState);
-    const response = await axios.get("/api/messages", options);
+    const response = await axios.get('/api/messages', options);
 
     dispatch({
       type: GET_MESSAGES_SUCCESS,
-      payload: { messages: response.data.messages },
+      payload: {messages: response.data.messages},
     });
   } catch (err) {
     dispatch({
       type: GET_MESSAGES_FAIL,
-      payload: { error: err?.response?.data.message || err.message },
+      payload: {error: err?.response?.data.message || err.message},
     });
   }
 };
@@ -40,20 +40,20 @@ export const getMessages = () => async (dispatch, getState) => {
 export const addMessage = (formData) => async (dispatch, getState) => {
   dispatch({
     type: ADD_MESSAGE_LOADING,
-    payload: { me: { ...getState().auth.me } },
+    payload: {me: {...getState().auth.me}},
   });
   try {
     const options = attachTokenToHeaders(getState);
-    const response = await axios.post("/api/messages", formData, options);
+    const response = await axios.post('/api/messages', formData, options);
 
     dispatch({
       type: ADD_MESSAGE_SUCCESS,
-      payload: { message: response.data.message },
+      payload: {message: response.data.message},
     });
   } catch (err) {
     dispatch({
       type: ADD_MESSAGE_FAIL,
-      payload: { error: err?.response?.data.message || err.message },
+      payload: {error: err?.response?.data.message || err.message},
     });
   }
 };
@@ -61,7 +61,7 @@ export const addMessage = (formData) => async (dispatch, getState) => {
 export const deleteMessage = (id) => async (dispatch, getState) => {
   dispatch({
     type: DELETE_MESSAGE_LOADING,
-    payload: { id },
+    payload: {id},
   });
   try {
     const options = attachTokenToHeaders(getState);
@@ -69,12 +69,12 @@ export const deleteMessage = (id) => async (dispatch, getState) => {
 
     dispatch({
       type: DELETE_MESSAGE_SUCCESS,
-      payload: { message: response.data.message },
+      payload: {message: response.data.message},
     });
   } catch (err) {
     dispatch({
       type: DELETE_MESSAGE_FAIL,
-      payload: { error: err?.response?.data.message || err.message },
+      payload: {error: err?.response?.data.message || err.message},
     });
   }
 };
@@ -82,7 +82,7 @@ export const deleteMessage = (id) => async (dispatch, getState) => {
 export const editMessage = (id, formData) => async (dispatch, getState) => {
   dispatch({
     type: EDIT_MESSAGE_LOADING,
-    payload: { id },
+    payload: {id},
   });
   try {
     const options = attachTokenToHeaders(getState);
@@ -90,17 +90,17 @@ export const editMessage = (id, formData) => async (dispatch, getState) => {
 
     dispatch({
       type: EDIT_MESSAGE_SUCCESS,
-      payload: { message: response.data.message },
+      payload: {message: response.data.message},
     });
   } catch (err) {
     dispatch({
       type: EDIT_MESSAGE_FAIL,
-      payload: { error: err?.response?.data.message || err.message, id },
+      payload: {error: err?.response?.data.message || err.message, id},
     });
   }
 };
 
 export const clearMessageError = (id) => ({
   type: CLEAR_MESSAGE_ERROR,
-  payload: { id },
+  payload: {id},
 });

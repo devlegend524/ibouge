@@ -1,25 +1,24 @@
 import {
-  GET_MICROBLOGS_FAILED,
   GET_MICROBLOGS_SUCCESS,
-} from "../actions/action_types/microblog";
+  CREATE_MICROBLOG_SUCCESS,
+} from '../actions/action_types/microblog';
 
 const initialState = {
   blogs: [],
   isLoading: false,
-  error: null,
 };
 
-const microblogReducer = (state = initialState, { type, payload }) => {
+const microblogReducer = (state = initialState, {type, payload}) => {
   switch (type) {
     case GET_MICROBLOGS_SUCCESS:
       return {
         ...state,
         blogs: payload,
       };
-    case GET_MICROBLOGS_FAILED:
+    case CREATE_MICROBLOG_SUCCESS:
       return {
         ...state,
-        error: payload,
+        blogs: payload,
       };
     default:
       return state;

@@ -1,0 +1,52 @@
+#topHeader {
+  height: 200px;
+  width: 100%;
+  background-color: #4e388d;
+  // position: absolute;
+}
+
+#topHeaderInnerDivForPicture {
+  margin: auto;
+  margin-top: 15px;
+  width: 150px;
+  height: 150px;
+  z-index: 10;
+  position: relative;
+}
+
+#uploadPhoto {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  top: 25px;
+  border: 1px solid #7662AB;
+  border-radius: 50%;
+  margin: auto;
+  background-color: #FAFBFD
+}
+
+#setMicroBlogPic {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 90px;
+  left: 155px;
+}
+
+#microBlogFormDiv {
+  // position: absolute;
+  top: 155px;
+  width: 100%;
+  height: 75%;
+}
+
+#microBlogForm {
+  width: 100%;
+}
+
+#mapContainer {
+  // position: absolute;
+  top: 135px;
+  height: 75%;
+  width: 100%;
+}

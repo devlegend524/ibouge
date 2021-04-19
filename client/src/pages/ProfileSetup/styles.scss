@@ -1,4 +1,3 @@
-
 .status {
     display: block;
     position: relative;
@@ -34,16 +33,20 @@
     justify-content: center;
     color: #909090;
 }
+
 .status .checkmark small {
     font-weight: 600;
 }
-.status .checkmark .col-6, .checkmark .col-12 {
+
+.status .checkmark .col-6,
+.checkmark .col-12 {
     height: 137px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
 }
+
 .status .checkmark .col-6:first-child:after {
     border-right: 1px solid rgba(208, 209, 209, 0.7);
     position: absolute;
@@ -59,12 +62,13 @@
 }*/
 
 /* When the radio button is checked, add a blue background */
-.status input:checked ~ .checkmark {
+.status input:checked~.checkmark {
     border: 1px solid #1e1e1e;
     color: #000;
     font-weight: 500;
 }
-.status input:checked ~ .checkmark svg {
+
+.status input:checked~.checkmark svg {
     fill: #1e1e1e;
 }
 
@@ -74,63 +78,75 @@
     position: absolute;
     display: none;
 }
+
 .kids .status .checkmark {
     width: 186px;
     height: 186px;
     align-items: center;
 }
-.kids > div {
+
+.kids>div {
     width: 186px;
     height: 186px;
 }
+
 .radioOption {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 }
-.radioOption > div {
+
+.radioOption>div {
     display: block;
     width: 186px;
     height: 186px;
 }
+
 .radioOption div.position-relative {
     margin-left: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
-	#geocoder {
-		width: 100%;
-		height: 50px;
-		margin-top: 15px;
-	}
 
-	.mapboxgl-ctrl-geocoder {
-		width: 100%;
-		height: 50px;
-		max-width: 100%;
-	}
+#geocoder {
+    width: 100%;
+    height: 50px;
+    margin-top: 15px;
+}
 
-	.mapboxgl-ctrl-geocoder input[type=text] {
-		font-size: large;
-		margin-top: 5px;
-	}
+.mapboxgl-ctrl-geocoder {
+    width: 100%;
+    height: 50px;
+    max-width: 100%;
+}
 
-	.mapboxgl-ctrl-geocoder span.geocoder-icon-search {
-		top: 15px;
-		left: 15px;
-	}
+.mapboxgl-ctrl-geocoder input[type=text] {
+    font-size: large;
+    margin-top: 5px;
+}
 
-	.mapboxgl-ctrl-geocoder ul {
-		font-size: large;
-	}
+.mapboxgl-ctrl-geocoder span.geocoder-icon-search {
+    top: 15px;
+    left: 15px;
+}
 
-	.mapboxgl-ctrl-geocoder {
-		z-index: 0 !important;
-	}
-    .prof-info-box-info-div {
-        width: 30%;
-    }
-    .w-70 {
-        width: 100% !important;
-        border-radius: 0% !important;
-    }
+.mapboxgl-ctrl-geocoder ul {
+    font-size: large;
+}
+
+.mapboxgl-ctrl-geocoder {
+    z-index: 0 !important;
+}
+
+.w-70 {
+    width: 100% !important;
+    border-radius: 0% !important;
+}
+
+.prof-info-box-info-div-business {
+    width: 50%;
+    bottom: 0;
+    left: -25px;
+    position: absolute;
+    z-index: 29;
+}

@@ -4,9 +4,19 @@
   object-fit: cover;
 }
 
-#container-fluid {
+#logoBrand {
   padding-top: 8%;
   background-color: #51458D;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#logoBrand-business {
+  padding-top: 8%;
+  height: 300px;
+  background-color: #51458D;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .prof-info-boxes {

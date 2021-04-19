@@ -1,46 +1,103 @@
-import React from 'react';
-import { useFormik } from 'formik';
-import { CheckBoxControl } from '../Inputs';
+import React, {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {setProfile} from '../../actions/registerActions';
 
 import './styles.scss';
 
-const checkBoxArrary = [
-  {
-    desc: "New Messages",
-    name: "new_messages"
-  },
-  {
-    desc: "New Events",
-    name: "new_events"
-  },
-  {
-    desc: "Friend Requests",
-    name: "friend_requests"
-  },
-  {
-    desc: "Invitations to Conversation",
-    name: "invitations_to_conversation"
-  }
-];
-
 const NotificationTab = () => {
-  const formik = useFormik({
-    initialValues: {
-      new_messages: false,
-      new_events: false,
-      friend_requests: false,
-      invitations_to_conversation: false,
+  const auth = useSelector((state) => state.auth.sess);
+  const dispatch = useDispatch();
+  const [notification_event, setNotificationEvent] = useState(
+    auth.notifications.new_events
+  );
+  const [notification_message, setNotificationMessage] = useState(
+    auth.notifications.new_messages
+  );
+  const [notification_friend_request, setNotificationFriendRequest] = useState(
+    auth.notifications.friend_requests
+  );
+  const [notification_invite_chat, setNotificationInviteChat] = useState(
+    auth.notifications.invitations_to_conversation
+  );
+  const handleChange = (type) => {
+    if (type === 'new_events') {
+      setNotificationEvent(!notification_event);
     }
-  });
-
-  const updateNotifications = () => {}
+    if (type === 'new_messages') {
+      setNotificationMessage(!notification_message);
+    }
+    if (type === 'friend_requests') {
+      setNotificationFriendRequest(!notification_friend_request);
+    }
+    if (type === 'invitations_to_conversation') {
+      setNotificationInviteChat(!notification_invite_chat);
+    }
+  };
+  const updateNotifications = () => {
+    console.log('submit button clicked...');
+    const data = {
+      notifications: {
+        new_messages: notification_message,
+        new_events: notification_event,
+        friend_requests: notification_friend_request,
+        invitations_to_conversation: notification_invite_chat,
+      },
+    };
+    dispatch(setProfile(data));
+  };
 
   return (
     <>
       <h3 className="tab-Head-Txts">Notifications</h3>
       <form className="tabs-notify-checkbox-frm-pad">
-        {checkBoxArrary.map((item, index) => (<CheckBoxControl desc={item.desc} name={item.name} handle={formik} key={index} />))}
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">New Messages</span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('new_messages')}
+              checked={notification_message ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">New Events</span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('new_events')}
+              checked={notification_event ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
 
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">Friend Requests</span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('friend_requests')}
+              checked={notification_friend_request ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">
+            Invitations to Conversation
+          </span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('invitations_to_conversation')}
+              checked={notification_invite_chat ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
         <div className="notification action-container">
           <button
             type="button"
@@ -59,6 +116,6 @@ const NotificationTab = () => {
       </form>
     </>
   );
-}
+};
 
 export default NotificationTab;

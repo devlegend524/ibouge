@@ -23,12 +23,12 @@ import logo from '../../assets/img/ibouge-logo.png';
 const Register = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const {error} = useSelector((state) => state.register);
+  const errors = useSelector((state) => state.errors);
   const auth = useSelector((state) => state.auth);
   const register = useSelector((state) => state.register);
   useEffect(() => {
     dispatch(setTitle('Register'));
-  }, []);
+  }, [dispatch]);
   const formik = useFormik({
     initialValues: {
       fname: '',
@@ -48,7 +48,6 @@ const Register = () => {
         dob: new Date(values.yyyy + '-' + values.mm + '-' + values.dd),
       };
       dispatch(registerUserWithEmail(data));
-      if (!error) history.push('/profile_setup/step1');
     },
   });
 
@@ -76,9 +75,9 @@ const Register = () => {
                       {register.message && register.state === 'success' && (
                         <span className="login-success-msg">
                           {register.message}{' '}
-                          <span onClick={resendEmail} aria-hidden="true">
+                          <a onClick={resendEmail} aria-hidden="true">
                             Resend
-                          </span>{' '}
+                          </a>{' '}
                           link.
                         </span>
                       )}

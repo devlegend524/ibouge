@@ -27,15 +27,14 @@ const useQuery = () => {
 };
 
 const Login = () => {
-  const [rememberMeChkBx, setRememberMeChkBx] = useState(false);
-  const [remember_me, setRemember_me] = useCookies('remember_me');
-
-  const query = useQuery();
-  const [token] = useState(query.get('token'));
-
   const dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
+  const errors = useSelector((state) => state.errors);
+  const [rememberMeChkBx, setRememberMeChkBx] = useState(false);
+  const [remember_me, setRemember_me] = useCookies('remember_me');
+  const query = useQuery();
+  const [token] = useState(query.get('token'));
 
   useEffect(() => {
     if (token) dispatch(activeUser(token, history));
@@ -81,8 +80,8 @@ const Login = () => {
                   Welcome! Log in to your account
                 </h4>
                 <div className="login-box">
-                  {auth.error && (
-                    <span className="login-error-msg">{auth.error}</span>
+                  {errors.user_login && (
+                    <span className="login-error-msg">{errors.user_login}</span>
                   )}
                   <SocialAuth />
                   <span className="login-seperator-txt">Or</span>

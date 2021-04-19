@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
-// import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Navbar from '../../components/Navbar';
 import requireAuth from '../../hoc/requireAuth';
 
@@ -9,6 +8,8 @@ import AccountTab from '../../components/AccountTab';
 import PrivacyTab from '../../components/PrivacyTab';
 import NotificationTab from '../../components/NotificationTab';
 import Footer from '../../components/Footer';
+import ImageCropper from '../../components/ImageCropper';
+import {setProfilePic} from '../../actions/authActions';
 
 import uploadPhoto from '../../assets/img/upload-photo.png';
 import uploadPhotoPurple from '../../assets/img/upload-photo-icon-purple.png';
@@ -16,19 +17,58 @@ import './styles.scss';
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState('profile');
-  const changeProfilePic = () => {};
-  // const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const [open, setOpen] = useState(false);
+  const [newBlogImageUrl, setNewBlogImageUrl] = useState(
+    auth.sess.profile_pic ? auth.sess.profile_pic : uploadPhoto
+  );
+  const dispatch = useDispatch();
+  const changeProfilePic = () => {
+    setOpen(true);
+  };
+  const handleChangePic = () => {
+    var reqData = {
+      userId: auth.sess._id,
+      file: newBlogImageUrl,
+      originalFile: newBlogImageUrl,
+      albumName: 'all-profile-pictures',
+    };
+    console.log('change imgUrl', reqData);
+    dispatch(setProfilePic(reqData));
+  };
+  const getMicroblogPic = (imgUrl) => {
+    setNewBlogImageUrl(imgUrl);
+  };
+
   return (
     <>
       <Navbar title="Profile-Setting" />
       <div className="profile">
-        <div className="container header">
-          <div className="row">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h3 className="my-prof-sett-name text-center">Settings</h3>
+        {auth.sess.account_type ? (
+          <div
+            className="container header-business"
+            style={{
+              backgroundImage: `url(${newBlogImageUrl})`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: '100% 100%',
+            }}
+          >
+            <div className="row">
+              <div className="col-md-12 col-sm-12 col-xs-12">
+                <h3 className="my-prof-sett-name text-center">Settings</h3>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="container header">
+            <div className="row">
+              <div className="col-md-12 col-sm-12 col-xs-12">
+                <h3 className="my-prof-sett-name text-center">Settings</h3>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="container">
           <div className="row" style={{padding: '2%'}}>
             <div className="col-md-1 col-sm-1 col-xs-12 hidden-xs"></div>
@@ -38,21 +78,21 @@ const Profile = () => {
                   <div className="my-prof-img-box-inner">
                     <div className="my-prof-img-box-photo-div">
                       <img
-                        src={uploadPhoto}
+                        src={newBlogImageUrl}
                         className="my-prof-img-box-photo-img"
                         alt="box"
                       />
                     </div>
                     <div className="my-prof-img-box-info-div">
-                      <Link to="" className="uploadProfImg">
+                      <a className="uploadProfImg">
                         <img
-                          onClick={() => changeProfilePic()}
+                          onClick={changeProfilePic}
                           src={uploadPhotoPurple}
                           className="my-prof-img-box-info-img"
                           alt="photo"
                           aria-hidden="true"
                         />
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -129,6 +169,12 @@ const Profile = () => {
         </div>
       </div>
       <Footer />
+      <ImageCropper
+        open={open}
+        setOpen={setOpen}
+        setImageUrl={getMicroblogPic}
+        handleChangePic={handleChangePic}
+      />
     </>
   );
 };

@@ -1,45 +1,30 @@
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import InteractiveMap, {
-  Source,
-  Layer,
-  NavigationControl,
-  GeolocateControl,
-} from 'react-map-gl';
-import axios from 'axios';
-
-import Geocoder from 'react-map-gl-geocoder';
 import Nabvar from '../../components/Navbar';
+// using import
+import FileUploadWithPreview from 'file-upload-with-preview';
 import {createEvent} from '../../actions/eventAction';
-import {MAPBOX_TOKEN} from '../../constants';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
+// JavaScript
+import L from 'leaflet';
+
+import {
+  MapContainer,
+  TileLayer,
+  MapConsumer,
+  LayersControl,
+  useMapEvents,
+} from 'react-leaflet';
+import GeoCoder from '../../components/GeoCoder';
 
 import './styles.scss';
-const mapStyle =
-  'https://api.maptiler.com/maps/positron/style.json?key=RGierAHokphISswP6JTB';
-const navControlStyle = {
-  cursor: 'pointer',
-  right: 10,
-  bottom: 50,
-};
-const getControlStyle = {
-  cursor: 'pointer',
-  right: 10,
-  bottom: 10,
-};
-const layerStyle = {
-  id: 'point',
-  type: 'circle',
-  source: 'single-point',
-  paint: {
-    'circle-radius': 10,
-    'circle-color': '#007cbf',
-  },
-};
+import 'file-upload-with-preview/dist/file-upload-with-preview.min.css';
+import 'leaflet/dist/leaflet.css';
+import {useHistory} from 'react-router-dom';
+// initialize a new FileUploadWithPreview object
 
 const CreateEvent = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector((state) => state.auth);
   const handleClick = (target) => {
     setStep(target);
@@ -66,20 +51,6 @@ const CreateEvent = () => {
     city: '',
     zip: '',
   });
-  const [viewport, setViewport] = useState({
-    latitude: 37.7577,
-    longitude: -122.4376,
-    zoom: 9,
-  });
-  const [geojson] = useState({
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        geometry: {type: 'Point', coordinates: coordinates},
-      },
-    ],
-  });
 
   const handleCreateEvent = (e) => {
     e.preventDefault();
@@ -101,62 +72,64 @@ const CreateEvent = () => {
         name: name,
       },
     };
-    console.log('summitting...');
+    console.log('submitting...');
     dispatch(createEvent(enentData));
+    history.push('/');
   };
-  const _onClick = (event) => {
-    const lng = event.lngLat[0];
-    const lat = event.lngLat[1];
-    console.log('long', lng);
-    console.log('lati', lat);
-    setCoordinates([lng, lat]);
-    const reverseGeocodingURL =
-      'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
-      lng +
-      ',' +
-      lat +
-      `.json?access_token=${MAPBOX_TOKEN}`;
-    axios.get(reverseGeocodingURL).then(function (response) {
-      if (response.data.features.length > 0) {
-        setLocation({
-          coordinates: coordinates,
-          bbox: [],
-          addrs1: response.data.features[0].place_name,
-          addrs2: response.data.features[0].context[1].text,
-          country: response.data.features[0].context[4].text,
-          state: response.data.features[0].context[3].text,
-          city: response.data.features[0].context[2].text,
-          zip: response.data.features[0].context[0].text,
-        });
-        handleMapClicked(locations);
-      }
 
-      handleViewportChange({
-        latitude: lat,
-        longitude: lng,
-        zoom: 9,
-      });
+  useEffect(() => {
+    const upload = new FileUploadWithPreview('myUniqueUploadId', {
+      showDeleteButtonOnImages: true,
+      text: {
+        chooseFile: 'Please Choose Event Image File',
+        browse: 'Upload',
+        selectedCount: 'Custom Files Selected Copy',
+      },
+    });
+    setEventFile(upload.cachedFileArray);
+  }, []);
+  const handleUpdateCity = (data) => {
+    console.log(data);
+    setLocation({
+      coordinates: [data.geocode.center.lat, data.geocode.center.lng],
+      bbox: data.geocode.bbox,
+      addrs1: data.geocode.properties.address.suburb,
+      addrs2: data.geocode.properties.address.borough,
+      country: data.geocode.properties.address.country,
+      state: data.geocode.properties.address.state,
+      city: data.geocode.properties.address.city,
+      zip: data.geocode.properties.address.country_code,
     });
   };
-  const mapRef = useRef();
-  const handleMapClicked = (newLocations) => {
-    console.log('new_location', newLocations);
-    setLocation(newLocations);
-  };
-  const handleViewportChange = useCallback((newViewport) => {
-    setViewport(newViewport);
-  }, []);
-  const handleGeocoderViewportChange = useCallback((newViewport) => {
-    const geocoderDefaultOverrides = {transitionDuration: 1000};
-    return handleViewportChange({
-      ...newViewport,
-      ...geocoderDefaultOverrides,
+  const MyComponent = () => {
+    const map = useMapEvents({
+      click: (e) => {
+        map.setView(e.latlng);
+        map.locate();
+        new L.CircleMarker(e.latlng, {
+          radius: 5,
+          fillColor: 'blue',
+          width: 0.5,
+          stroke: 'black',
+          color: '#000080',
+          fillOpacity: 0.5,
+        }).addTo(map);
+        setLocation({
+          coordinates: [e.latlng.lat, e.latlng.lng],
+          bbox: map.getBounds(),
+        });
+        // props.saveSelection(locations);
+      },
+      locationfound: (location) => {
+        console.log('location found:', location);
+      },
     });
-  }, []);
+    return null;
+  };
   return (
     <>
       <Nabvar title="Create-Event" />
-      <section className="content-area whiteBg chosen-font">
+      <section className="content-area whiteBg">
         <form name="createEventForm">
           {step === 'step1' ? (
             <div className="container">
@@ -169,15 +142,16 @@ const CreateEvent = () => {
                 <div className="col-lg-2 col-md-2 col-sm-2 col-12"></div>
                 <div className="col-lg-4 col-md-4 col-sm-4 col-12 left-small-group">
                   <div className="form-group form-spacing first-form">
-                    <label>Event name</label>
+                    <label className="event_label">Event name</label>
                     <input
                       type="text"
                       className="form-control input"
                       name="name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                      required
                     />
-                    <label>Event category</label>
+                    <label className="event_label">Event category</label>
                     <select
                       className="form-control input category"
                       name="category"
@@ -191,33 +165,36 @@ const CreateEvent = () => {
                       <option value="6">Hobby</option>
                       <option value="7">Other</option>
                     </select>
-                    <label>Start Date</label>
+                    <label className="event_label">Start Date</label>
                     <input
                       type="date"
                       className="form-control calendar-icon input"
                       name="date"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
+                      required
                     />
                     <div className="start-end-div">
                       <div className="start-time-div">
-                        <label>Start time</label>
+                        <label className="event_label">Start time</label>
                         <input
                           type="time"
                           className="form-control calendar-icon input"
                           name="startTimeOfEvent"
                           value={start_time}
                           onChange={(e) => setStartTime(e.target.value)}
+                          required
                         />
                       </div>
                       <div className="end-time-div">
-                        <label>End time</label>
+                        <label className="event_label">End time</label>
                         <input
                           type="time"
                           className="form-control calendar-icon input"
                           name="endTimeOfEvent"
                           value={end_time}
                           onChange={(e) => setEndTime(e.target.value)}
+                          required
                         />
                       </div>
                     </div>
@@ -226,7 +203,7 @@ const CreateEvent = () => {
                 <div className="col-lg-4 col-md-4 col-sm-4 col-12 event-description-div">
                   <div>
                     <div className="form-group form-spacing">
-                      <label>Event Description</label>
+                      <label className="event_label">Event Description</label>
                       <textarea
                         type="text"
                         className="form-control event-description-input textarea"
@@ -235,6 +212,7 @@ const CreateEvent = () => {
                         style={{height: '30vh'}}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                        required
                       />
                     </div>
                   </div>
@@ -242,38 +220,39 @@ const CreateEvent = () => {
               </div>
               <div className="row">
                 <div className="col-md-2 col-sm-2 col-12"></div>
-                <div
-                  ng-hide="event.img.isSet"
-                  className="col-md-8 col-sm-8 col-12"
-                >
-                  <input
-                    type="file"
-                    name="eventFile"
-                    id="eventfile"
-                    className="inputfile"
-                    onChange={(e) => setEventFile(e.target.files[0])}
-                  />
-                  <label
-                    htmlFor="eventfile"
-                    className="box has-advanced-upload form-box"
-                    style={{cursor: 'pointer'}}
+                <div className="col-md-8 col-sm-8 col-12">
+                  <div
+                    className="custom-file-container"
+                    data-upload-id="myUniqueUploadId"
                   >
-                    <p
-                      htmlFor="eventfile"
-                      className="box-big-text"
-                      style={{cursor: 'pointer'}}
-                    >
-                      DROP OR BROWSE COVER PHOTO TO UPLOAD
-                    </p>
-                    <p
-                      htmlFor="eventfile"
-                      className="box-small-text"
-                      style={{cursor: 'pointer'}}
-                    >
-                      recommended size is 1024x920
-                    </p>
-                  </label>
+                    <label className="event_label">
+                      Upload File
+                      <a
+                        href=""
+                        className="custom-file-container__image-clear"
+                        title="Clear Image"
+                      >
+                        &times;
+                      </a>
+                    </label>
+                    <label className="custom-file-container__custom-file">
+                      <input
+                        type="file"
+                        className="custom-file-container__custom-file__custom-file-input"
+                        accept="image/*"
+                        aria-label="Choose File"
+                      />
+                      <input
+                        type="hidden"
+                        name="MAX_FILE_SIZE"
+                        value="10485760"
+                      />
+                      <span className="custom-file-container__custom-file__custom-file-control"></span>
+                    </label>
+                    <div className="custom-file-container__image-preview"></div>
+                  </div>
                 </div>
+                <div className="col-md-2 col-sm-2 col-12"></div>
               </div>
               <div
                 className="next-step-column col-md-8 col-sm-8 col-12"
@@ -306,36 +285,17 @@ const CreateEvent = () => {
               <div className="step-two-div">
                 <div id="mapWrapper">
                   <div id="event-location-map">
-                    <InteractiveMap
-                      {...viewport}
-                      ref={mapRef}
-                      width="100%"
-                      height="100%"
-                      mapStyle={mapStyle}
-                      onViewportChange={handleGeocoderViewportChange}
-                      onClick={(e) => _onClick(e)}
-                      mapboxApiAccessToken={MAPBOX_TOKEN}
+                    <MapContainer
+                      style={{height: '300px', width: '100%'}}
+                      zoom={9}
+                      zoomControl={false}
+                      center={coordinates}
                     >
-                      <Geocoder
-                        mapRef={mapRef}
-                        onViewportChange={handleGeocoderViewportChange}
-                        mapboxApiAccessToken={MAPBOX_TOKEN}
-                        position="top-right"
-                      />
-                      <Source id="single-point" type="geojson" data={geojson}>
-                        <Layer {...layerStyle} />
-                      </Source>
-                      <NavigationControl style={navControlStyle} />
-                      <GeolocateControl style={getControlStyle} />
-                    </InteractiveMap>
+                      <TileLayer url="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      <GeoCoder handleSearch={handleUpdateCity} />
+                      {/* <MyComponent /> */}
+                    </MapContainer>
                   </div>
-                  <p
-                    className="profile-set-head"
-                    style={{marginTop: '10px', color: '#484A5A'}}
-                  >
-                    Search for an address
-                  </p>
-                  <div id="createEventGeocoder"></div>
                   <button
                     type="submit"
                     className="create-event-button"

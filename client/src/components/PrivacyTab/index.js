@@ -1,50 +1,126 @@
-import React from 'react';
-import { useFormik } from 'formik';
-import { CheckBoxControl } from '../Inputs';
+import React, {useEffect, useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+
+import {setProfile} from '../../actions/registerActions';
 import EventIcon from '../../assets/img/event-icon.png';
 import './styles.scss';
 
-const checkBoxArrary = [
-  {
-    desc: "Only allow other members to see my profile",
-    name: "only_members_see_profile"
-  },
-  {
-    desc: "Share my recent events",
-    name: "share_recent_events"
-  },
-  {
-    desc: "Show my friends",
-    name: "show_my_friends"
-  },
-  {
-    desc: "Make my profile public",
-    name: "is_profile_public"
-  },
-  {
-    desc: "New messages",
-    name: "new_messages"
-  }
-];
-
 const PrivacyTab = () => {
-  const updatePrivacy = () => {}
+  const auth = useSelector((state) => state.auth.sess);
+  const dispatch = useDispatch();
+  const [member_see, setMemberSee] = useState(
+    auth.privacy.only_members_see_profile
+  );
+  const [shareEvent, setShareEvent] = useState(
+    auth.privacy.share_recent_events
+  );
+  const [showFriend, setShowFriend] = useState(auth.privacy.show_my_friends);
+  const [profilePublic, setProfilePublic] = useState(
+    auth.privacy.is_profile_public
+  );
+  const [newMessages, setNewMessages] = useState(auth.privacy.new_messages);
+  const [blockList, setBlockList] = useState(auth.privacy.block_list);
 
-  const formik = useFormik({
-    initialValues: {
-      only_members_see_profile: false,
-      share_recent_events: false,
-      show_my_friends: false,
-      is_profile_public: false,
-      new_messages: false,
+  const handleChange = (type) => {
+    if (type === 'only_members_see_profile') {
+      setMemberSee(!member_see);
     }
-  });
+    if (type === 'share_recent_events') {
+      setShareEvent(!shareEvent);
+    }
+    if (type === 'show_my_friends') {
+      setShowFriend(!showFriend);
+    }
+    if (type === 'is_profile_public') {
+      setProfilePublic(!profilePublic);
+    }
+    if (type === 'new_messages') {
+      setNewMessages(!newMessages);
+    }
+    if (type === 'block_list') {
+      setBlockList(!blockList);
+    }
+  };
+  const updatePrivacy = () => {
+    console.log('submit button clicked...');
+    const data = {
+      privacy: {
+        only_members_see_profile: member_see,
+        share_recent_events: shareEvent,
+        show_my_friends: showFriend,
+        is_profile_public: profilePublic,
+        new_messages: newMessages,
+        block_list: blockList,
+      },
+    };
+    dispatch(setProfile(data));
+  };
 
   return (
     <>
       <h3 className="tab-Head-Txts">Privacy</h3>
       <form className="tabs-notify-checkbox-frm-pad">
-        {checkBoxArrary.map((item, index) => (<CheckBoxControl desc={item.desc} name={item.name} handle={formik} key={index} />))}
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">
+            Only allow other members to see my profile
+          </span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('only_members_see_profile')}
+              checked={member_see ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">
+            Share my recent events
+          </span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('share_recent_events')}
+              checked={shareEvent ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">Show my friends</span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('show_my_friends')}
+              checked={showFriend ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">
+            Make my profile public
+          </span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('is_profile_public')}
+              checked={profilePublic ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
+        <div className="tabs-notify-check-styles">
+          <span className="tabs-notify-check-span-toggle">New messages</span>
+          <label className="switch tabs-notify-checkbox-align-toggle">
+            <input
+              type="checkbox"
+              onChange={(e) => handleChange('new_messages')}
+              checked={newMessages ? 'checked' : ''}
+            />
+            <div className="slider round"></div>
+          </label>
+        </div>
       </form>
 
       <h3 className="tab-Head-Txts">Block List</h3>
@@ -88,6 +164,6 @@ const PrivacyTab = () => {
       </form>
     </>
   );
-}
+};
 
 export default PrivacyTab;

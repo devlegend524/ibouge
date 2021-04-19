@@ -4,35 +4,20 @@ import {
   LOGOUT_SUCCESS,
   LOGIN_WITH_EMAIL_LOADING,
   LOGIN_WITH_EMAIL_SUCCESS,
-  LOGIN_WITH_EMAIL_FAIL,
   ME_LOADING,
   ME_SUCCESS,
-  ME_FAIL,
-  GET_PROFILE_LOADING,
-  GET_PROFILE_SUCCESS,
-  GET_PROFILE_FAIL,
-  EDIT_USER_LOADING,
-  EDIT_USER_SUCCESS,
-  EDIT_USER_FAIL,
-  DELETE_USER_LOADING,
-  DELETE_USER_SUCCESS,
-  DELETE_USER_FAIL,
-  GET_USERMETA_LOADING,
-  GET_USERMETA_SUCCESS,
-  GET_USERMETA_FAIL,
+  SET_PROFILE_IMG,
 } from '../actions/action_types/auth';
+import {SET_PROFILE_SUCCESS} from '../actions/action_types/users';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: false,
   isLoading: false,
-  error: null,
   sess: {},
-  profile: {},
-  userMeta: {},
 };
 
-const authReducer = (state = initialState, { type, payload }) => {
+const authReducer = (state = initialState, {type, payload}) => {
   switch (type) {
     case ME_LOADING:
       return {
@@ -66,18 +51,13 @@ const authReducer = (state = initialState, { type, payload }) => {
         sess: payload.user,
         error: null,
       };
-    case ME_FAIL:
-      localStorage.removeItem('token');
+    case SET_PROFILE_SUCCESS:
       return {
         ...state,
-        isAuthenticated: false,
+        sess: payload,
         isLoading: false,
-        sess: null,
-        error: null,
-        appLoaded: true,
       };
     case LOGOUT_SUCCESS:
-    case LOGIN_WITH_EMAIL_FAIL:
       localStorage.removeItem('token');
       return {
         ...state,
@@ -85,52 +65,16 @@ const authReducer = (state = initialState, { type, payload }) => {
         isLoading: false,
         error: payload, //payload message ovde i razdvoj logout i fail
       };
-    case GET_PROFILE_LOADING:
-    case EDIT_USER_LOADING:
-    case DELETE_USER_LOADING:
-    case GET_USERMETA_LOADING:
+    case SET_PROFILE_IMG:
       return {
         ...state,
-        isLoading: true,
-        error: null,
-      };
-    case GET_PROFILE_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        profile: payload.profile,
-      };
-    case EDIT_USER_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        profile: payload.user,
-      };
-    case DELETE_USER_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        profile: {},
-      };
-    case GET_USERMETA_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        userMeta: payload.userMeta,
-      };
-    case GET_PROFILE_FAIL:
-    case EDIT_USER_FAIL:
-    case DELETE_USER_FAIL:
-    case GET_USERMETA_FAIL:
-      return {
-        ...state,
-        isLoading: false,
-        profile: {},
-        userMeta: {},
-        error: payload.error,
+        sess: {
+          ...state.sess,
+          profilePic: payload,
+        },
       };
     default:
       return state;
   }
-}
+};
 export default authReducer;

@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import {useParams} from 'react-router-dom';
 
-import StepOne from "./step1";
-import StepTwo from "./step2";
-import StepThree from "./step3";
-import StepFour from "./step4";
-import logo from "../../assets/img/ibouge-logo.png";
+import StepOne from './step1';
+import StepTwo from './step2';
+import StepThree from './step3';
+import StepFour from './step4';
+import StepFive from './step5';
+import logo from '../../assets/img/ibouge-logo.png';
 
-import "./styles.scss";
-import { setTitle } from "../../actions/commonAction";
+import './styles.scss';
+import {setTitle} from '../../actions/commonAction';
 
 const ProfileSetup = (props) => {
   const param = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setTitle(`ProfileSetup-${param.step}`));
-  }, []);
+  }, [dispatch, param.step]);
   return (
     <section className="content-area">
       <div className="container containerWidth">
@@ -27,14 +28,16 @@ const ProfileSetup = (props) => {
           </div>
           <div className="com-md-4 col-sm-4 col-12"></div>
         </div>
-        {param.step === "step1" ? (
+        {param.step === 'step1' ? (
           <StepOne />
-        ) : param.step === "step2" ? (
+        ) : param.step === 'step2' ? (
           <StepTwo />
-        ) : param.step === "step3" ? (
+        ) : param.step === 'step3' ? (
           <StepThree />
-        ) : (
+        ) : param.step === 'step4' ? (
           <StepFour />
+        ) : (
+          <StepFive />
         )}
       </div>
     </section>

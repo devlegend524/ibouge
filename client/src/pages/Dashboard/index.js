@@ -1,24 +1,32 @@
 import React, {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import _ from 'lodash';
 import Navbar from '../../components/Navbar';
 import Feed from './feed';
 import Map from './map';
 import Event from './event';
+import MicroBlog from './microblog';
 import Friend from './friend';
 import Footer from './footer';
 
 import './styles.scss';
 
 const Dashboard = () => {
-  const [myFriends, setMyFriends] = useState({total: 0, friends: []});
-
+  const getMyFriends = useSelector((state) => state.users.friends);
+  const [myFriends, setMyFriends] = useState({
+    total: getMyFriends.length,
+    friends: getMyFriends,
+  });
+  const setFreindSelect = (friend) => {
+    const index = myFriends.friends.indexOf(friend);
+    const temp = myFriends;
+    temp.friends[index + 1].selected = true;
+    setMyFriends(temp);
+  };
   const selectedFriends = _.filter(myFriends.friends, {selected: true});
 
   const startConversation = (selectedFriends) => {};
-  const dispatch = useDispatch();
-
   return (
     <>
       <Navbar title="Dashboard" />
@@ -26,7 +34,7 @@ const Dashboard = () => {
         <div className="container containerWidth">
           <div className="row user-prof-name-pad">
             <div className="col-md-1 col-sm-1 col-xs-12 text-center hidden-xs"></div>
-            <div className="col-md-6 col-sm-6 col-xs-12 hidden-xs">
+            <div className="col-md-6 col-sm-6 col-xs-12">
               <Feed />
             </div>
 
@@ -36,6 +44,7 @@ const Dashboard = () => {
 
             <div className="col-md-4 col-sm-4 col-xs-12 offset-md-1">
               <Event />
+              <MicroBlog />
             </div>
             <div className="col-md-1 col-sm-1 col-xs-12 text-center hidden-xs"></div>
           </div>
@@ -56,7 +65,8 @@ const Dashboard = () => {
               <div className="ibg-overlay">
                 <span
                   style={{fontSize: '20px', cursor: 'pointer'}}
-                  onClick={() => {
+                  onClick={(e) => {
+                    setFreindSelect(myFriend);
                     myFriend.selected = false;
                   }}
                   aria-hidden="true"
