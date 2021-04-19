@@ -1,56 +1,33 @@
-import axios from "axios";
-
 import {
   GET_ALL_STATUS_LOADING,
-  GET_ALL_STATUS_SUCCESS,
-  GET_ALL_STATUS_FAIL,
   DELETE_STATUS_LOADING,
-  DELETE_STATUS_SUCCESS,
-  DELETE_STATUS_FAIL,
-} from "./action_types/feed";
+  POST_NEW_DATA_LOADING,
+  ADD_OR_REMOVE_LIKE,
+  ADD_OR_REMOVE_REPLY,
+} from './action_types/feed';
 
-export const getAllStatusUpdates = () => async (dispatch, getState) => {
-  dispatch({
-    type: GET_ALL_STATUS_LOADING,
-  });
+export const getAllStatusUpdates = () => ({
+  type: GET_ALL_STATUS_LOADING,
+});
 
-  try {
-    const response = await axios.get("/status/getStatus");
-
-    dispatch({
-      type: GET_ALL_STATUS_SUCCESS,
-      payload: { data: response.data },
-    });
-  } catch (err) {
-    dispatch({
-      type: GET_ALL_STATUS_FAIL,
-      payload: { error: err?.response?.data || err.message },
-    });
-  }
-};
-
-export const deleteStatus = (id, from) => async (dispatch, getState) => {
-  if (id && from) {
-    dispatch({
-      type: DELETE_STATUS_LOADING,
-    });
-
-    try {
-      const response = await axios.post("status/delete-status", { id, from });
-
-      dispatch({
-        type: DELETE_STATUS_SUCCESS,
-        payload: { data: response.data },
-      });
-    } catch (err) {
-      dispatch({
-        type: DELETE_STATUS_FAIL,
-        payload: { error: err?.response?.data || err.message },
-      });
-    }
-  }
-};
-
+export const deleteStatus = (data) => ({
+  type: DELETE_STATUS_LOADING,
+  payload: data,
+});
+export const postNewStatus = (data) => ({
+  type: POST_NEW_DATA_LOADING,
+  payload: {
+    data: data,
+  },
+});
+export const addOrRemoveLike = (payload) => ({
+  type: ADD_OR_REMOVE_LIKE,
+  payload,
+});
+export const addOrRemoveReply = (payload) => ({
+  type: ADD_OR_REMOVE_REPLY,
+  payload,
+});
 /*
 const deleteReply = (reply_id, status_id) => {
     var deferred = $q.defer();
@@ -68,21 +45,7 @@ const deleteReply = (reply_id, status_id) => {
     return deferred.promise;
 };
 
-const postNewStatus = (data) => {
-    var deferred = $q.defer();
-    $timeout(function(){
-        if (data) {
-            $http.post('status/new-status', data).then(function(response) {
-                deferred.resolve(response.data);
-            }, function(response) {
-                deferred.resolve(response.data);
-            });
-        } else {
-            deferred.reject('Invalid data');
-        }
-    });
-    return deferred.promise;
-};
+
 
 const postNewReply = function (data) {
     var deferred = $q.defer();

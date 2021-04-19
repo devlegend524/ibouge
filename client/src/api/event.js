@@ -1,16 +1,16 @@
 import axios from 'axios';
 
 export const getAllEvents = () => {
-  return axios.get('/event/allEvents')
-}
+  return axios.get('/event/allEvents');
+};
 
 export const getMyEvents = (_id) => {
-  return axios.get(`/event/${_id}`)
-}
+  return axios.get(`/event/${_id}`);
+};
 
 export const getEventClicked = (data) => {
-  return axios.get(`/event/event-clicked/${data}`)
-}
+  return axios.get(`/event/event-clicked/${data}`);
+};
 
 export const createEvent = (file, data) => {
   if (data) {
@@ -21,7 +21,7 @@ export const createEvent = (file, data) => {
 
     // we append to the formData the file itself it it exists, the albumName, userId and all of the event properties
     if (file) {
-        fd.append('file', file);
+      fd.append('file', file);
     }
     fd.append('albumName', albumName);
     fd.append('userId', data.createdBy);
@@ -34,7 +34,7 @@ export const createEvent = (file, data) => {
     fd.append('country', data.country);
     fd.append('createdBy', data.createdBy);
     fd.append('date', data.date);
-    fd.append('endTimeOfEvent',data.endTimeOfEvent);
+    fd.append('endTimeOfEvent', data.endTimeOfEvent);
     fd.append('eventDescription', data.eventDescription);
     fd.append('userGoing', data.going.userGoing);
     fd.append('confirmationDate', data.going.confirmationDate);
@@ -43,6 +43,6 @@ export const createEvent = (file, data) => {
     fd.append('state', data.state);
     fd.append('zip', data.zip);
 
-    return axios.post('/event/create/', fd)
+    return axios.post('/event/create', fd);
   }
-}
+};

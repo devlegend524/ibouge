@@ -1,9 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Redirect} from 'react-router';
 
 export default (ChildComponent) => {
   class ComposedComponent extends Component {
-    // Our component just got rendered
+    // Our component just got rendered\\
+
+    componentWillMount() {
+      this.shouldNavigateAway();
+    }
     componentDidMount() {
       this.shouldNavigateAway();
     }
@@ -20,14 +25,17 @@ export default (ChildComponent) => {
         this.props.history.push('/login');
       }
     }
-
     render() {
-      return <ChildComponent {...this.props} />;
+      return this.props.auth.isAuthenticated ? (
+        <ChildComponent {...this.props} />
+      ) : (
+        <Redirect to="/login" />
+      );
     }
   }
 
   function mapStateToProps(state) {
-    return { auth: state.auth };
+    return {auth: state.auth};
   }
 
   return connect(mapStateToProps)(ComposedComponent);

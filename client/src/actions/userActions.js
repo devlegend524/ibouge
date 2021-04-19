@@ -1,10 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { attachTokenToHeaders } from "../helpers/utils";
+import {attachTokenToHeaders} from '../helpers/utils';
 import {
   GET_PROFILE_LOADING,
-  GET_PROFILE_SUCCESS,
-  GET_PROFILE_FAIL,
   EDIT_USER_LOADING,
   USER_PROFILE_CHANGE,
   EDIT_USER_FAIL,
@@ -12,15 +10,16 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
   GET_USERMETA_LOADING,
-  GET_USERMETA_SUCCESS,
-  GET_USERMETA_FAIL,
   GET_USERS_LOADING,
-  GET_USERS_SUCCESS,
-  GET_USERS_FAIL,
-} from "./action_types/users";
+  SEND_FRIEND_REQUEST,
+  ACCEPT_FRIEND_REQUEST,
+  CANCEL_FRIEND_REQUEST,
+  LOAD_META,
+  GET_FRIENDS_LOADING,
+} from './action_types/users';
 
-import { logOutUser, loadMe } from "./authActions";
-export const getAllUsers = () => ({ type: GET_USERS_LOADING });
+import {logOutUser, loadMe} from './authActions';
+export const getAllUsers = () => ({type: GET_USERS_LOADING});
 
 export const editUser = (id, formData, history) => async (
   dispatch,
@@ -51,6 +50,10 @@ export const editUser = (id, formData, history) => async (
     });
   }
 };
+export const loadMeta = (payload) => ({
+  type: LOAD_META,
+  payload,
+});
 
 export const getUserProfile = (username) => ({
   type: GET_PROFILE_LOADING,
@@ -72,7 +75,7 @@ export const deleteUser = (id, history) => async (dispatch, getState) => {
     if (getState().auth.me.id === response.data.user.id) {
       dispatch(logOutUser(id, history));
     }
-    history.push("/users");
+    history.push('/users');
     dispatch({
       type: DELETE_USER_SUCCESS,
       payload: {
@@ -88,11 +91,26 @@ export const deleteUser = (id, history) => async (dispatch, getState) => {
     });
   }
 };
+export const getMyFriends = (userId) => ({
+  type: GET_FRIENDS_LOADING,
+  payload: userId,
+});
 export const getUserMeta = (userId) => ({
   type: GET_USERMETA_LOADING,
   payload: userId,
 });
-
+export const sendFriendRequest = (friendId) => ({
+  type: SEND_FRIEND_REQUEST,
+  payload: friendId,
+});
+export const acceptFriendRequest = (friendId) => ({
+  type: ACCEPT_FRIEND_REQUEST,
+  payload: friendId,
+});
+export const unfriend = (friendId) => ({
+  type: CANCEL_FRIEND_REQUEST,
+  payload: friendId,
+});
 // export const getUsers = () => async (dispatch, getState) => {
 //   dispatch({
 //     type: GET_USERS_LOADING,

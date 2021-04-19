@@ -19,18 +19,12 @@ function* getAllEvents(action) {
 function* createEvent(action) {
   // try to make the api call
   try {
-    console.log('===create event-====', action.payload.data);
-
     // yield the api responsse into data
     const data = yield call(
       api.createEvent,
       action.payload.file,
       action.payload.data
     );
-    yield put({
-      type: types.CREATE_EVENTS_SUCCESS,
-      payload: data.data,
-    });
   } catch (e) {
     console.log(e);
   }

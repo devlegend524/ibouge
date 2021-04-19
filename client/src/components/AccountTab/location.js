@@ -1,51 +1,81 @@
-import React from 'react';
-import ReactMapboxGl, { ZoomControl } from 'react-mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import './styles.scss';
-
-const Map = ReactMapboxGl({
-  accessToken: 'pk.eyJ1IjoiaWJvdWdlIiwiYSI6ImNqY2wzaXJ5YTAycWIzM2pyb3JhN20yenkifQ.jhimhHWkb-6GD3Tq8bvCKA'
-});
+import React, {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {MapContainer, TileLayer} from 'react-leaflet';
+import GeoCoder from '../../components/GeoCoder';
+import {setProfile} from '../../actions/registerActions';
 
 const LocationTab = () => {
-  const updateAccountLocation = () => {}
+  const user = useSelector((state) => state.auth.sess);
+  const dispatch = useDispatch();
+  const [userLocations, setUserLocation] = useState({
+    coordinates: [],
+    bbox: [],
+    addrs1: '',
+    addrs2: '',
+    country: '',
+    state: '',
+    city: '',
+    zip: '',
+  });
 
-  const navStyle = {
-    position: 'absolute',
-    bottom: 100,
-    right: 0,
-    padding: '10px'
+  const updateAccountLocation = () => {
+    if (userLocations.coordinates.length > 0) {
+      dispatch(
+        setProfile({
+          location: {
+            ...userLocations,
+          },
+        })
+      );
+    }
   };
 
+  const handleUpdateCity = (data) => {
+    console.log(data);
+    setUserLocation({
+      coordinates: [data.geocode.center.lat, data.geocode.center.lng],
+      bbox: data.properties?.boundingbox,
+      addrs1: data.properties?.address?.town,
+      addrs2: data.properties?.address?.county,
+      country: data.properties?.address?.country,
+      state: data.properties?.address?.state,
+      city: data.properties?.address?.town,
+      zip: data.properties?.address?.country_code,
+    });
+  };
   return (
     <form action="profile_setup_step_three.html">
-      <Map
-        style="https://api.maptiler.com/maps/positron/style.json?key=RGierAHokphISswP6JTB"
-        containerStyle={{
-          height: '300px',
-          width: '400px',
-        }}
-        zoom={[9]}
-      >
-        <div className="nav" style={navStyle}>
-          <ZoomControl />
-        </div>
-      </Map>
       {/* <div id="geocoder" className="hidden"></div> */}
       {/* <p className="fadeOut"
         style={{ margin: '7px', color: '#07d326', fontSize: 'x-large' }}>
         Updated Successfully!
       </p> */}
       <div className="account action-container">
-        <button type="button" onClick={() => updateAccountLocation()}
-          className="btn btn-primary chat-invite-orange-btn margin-btn tab-sett-btn-pad">
+        <MapContainer
+          style={{height: '300px', width: '100%'}}
+          zoom={9}
+          zoomControl={false}
+          center={user.location.coordinates}
+        >
+          <TileLayer url="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <GeoCoder handleSearch={handleUpdateCity} />
+        </MapContainer>
+        <button
+          type="button"
+          onClick={() => updateAccountLocation()}
+          className="btn btn-primary chat-invite-orange-btn margin-btn tab-sett-btn-pad"
+        >
           SAVE
         </button>
-        <button type="button"
-          className="btn btn-primary chat-invite-purple-btn margin-btn">CANCEL</button>
+        <button
+          type="button"
+          className="btn btn-primary chat-invite-purple-btn margin-btn"
+        >
+          CANCEL
+        </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default LocationTab
+export default LocationTab;

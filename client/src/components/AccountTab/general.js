@@ -1,103 +1,157 @@
 import React from 'react';
-import { useFormik } from 'formik';
-import { SelectControl, InputForControl } from '../Inputs';
-import { gender, dob } from '../../pages/Register/util';
-import './styles.scss';  
+import {useSelector} from 'react-redux';
+import {useFormik} from 'formik';
+import {SelectControl, InputForControl} from '../Inputs';
+import {gender, dob} from '../../pages/Register/util';
+import './styles.scss';
 
 const GeneralTab = () => {
+  const auth = useSelector((state) => state.auth.sess);
   const formik = useFormik({
     initialValues: {
-      fname: '',
-      lname: '',
-      gender: '',
-      mm: '',
-      dd: '',
-      yyyy: '',
-      email: '',
+      fname: auth.fname,
+      lname: auth.lname,
+      gender: auth.gender,
+      mm: auth.mm,
+      dd: auth.dd,
+      yyyy: auth.yyyy,
+      email: auth.email,
       password: '',
       confirmPassword: '',
     },
-    onSubmit: (values) => {}
+    onSubmit: (values) => {
+      console.log(values);
+    },
   });
-
   return (
     <form className="tab-sett-frm-pad">
       <div className="col-md-12 col-sm-12 col-xs-12 padding-zero">
         <div className="col-md-6 col-sm-6 col-xs-12 padding-zero padding-left-zero">
-          <InputForControl
-            placeholder="First Name"
-            text="First Name"
-            size="1.2em"
-            name="fname"
-            nid="exampleInputName1"
-            handle={formik}
-            customClass="tab-inputarea-style"
-          />
+          <div className="form-group">
+            <label htmlFor="fname">First Name</label>
+            <input
+              id="fname"
+              placeholder="First Name"
+              required="required"
+              name="fname"
+              className="form-control tab-inputarea-style"
+              type="text"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values['fname']}
+            />
+          </div>
         </div>
         <div className="col-md-6 col-sm-6 col-xs-12 padding-zero padding-right-zero">
-          <InputForControl
-            placeholder="Last Name"
-            text="Last Name"
-            size="1.2em"
-            name="lname"
-            nid="exampleInputName2"
-            handle={formik}
-            customClass="tab-inputarea-style"
-          />
+          <div className="form-group">
+            <label htmlFor="fname">Last Name</label>
+            <input
+              id="lname"
+              placeholder="Last Name"
+              required="required"
+              name="lname"
+              className="form-control tab-inputarea-style"
+              type="text"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values['lname']}
+            />
+          </div>
         </div>
       </div>
       <div className="col-md-12 col-sm-12 col-xs-12 padding-zero">
         <div className="col-md-6 col-sm-6 col-xs-12 padding-zero padding-left-zero">
-          <SelectControl name="gender" handle={formik}>
-            {gender.map((item, index) => (<option key={index} value={item.id}>{item.name}</option>))}
-          </SelectControl>
+          <div className="form-group">
+            <select
+              className="form-control"
+              name="gender"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values['gender']}
+            >
+              {gender.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.name}
+                </option>
+              ))}{' '}
+            </select>
+          </div>
         </div>
         <div className="col-md-6 col-sm-6 col-xs-12 padding-zero padding-right-zero">
           <div className="btn-group grp-width">
             <div className="btn-group signup-width-left">
               <SelectControl name="mm" handle={formik}>
-                {dob.mm.map((item, index) => (<option key={index} value={item.id}>{item.name}</option>))}
+                {dob.mm.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
               </SelectControl>
             </div>
             <div className="btn-group signup-width-mid">
               <SelectControl name="dd" handle={formik}>
-                {dob.dd.map((item, index) => (<option key={index} value={item}>{item}</option>))}
+                {dob.dd.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
               </SelectControl>
             </div>
             <div className="btn-group signup-width-right">
               <SelectControl name="yyyy" handle={formik}>
-                {dob.yyyy.map((item, index) => (<option key={index} value={item}>{item}</option>))}
+                {dob.yyyy.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
               </SelectControl>
             </div>
           </div>
         </div>
       </div>
-      <InputForControl
-        placeholder="Email"
-        text="Email address"
-        size="1.2em"
-        name="email"
-        nid="exampleInputEmail3"
-        handle={formik}
-      />
-      <InputForControl
-        placeholder="Password"
-        text="Password"
-        name="password"
-        size="1.2em"
-        nid="exampleInputPassword3"
-        type="password"
-        handle={formik}
-      />
-      <InputForControl
-        placeholder="Password"
-        text="Repeat Password"
-        name="confirmPassword"
-        size="1.2em"
-        nid="exampleInputConfirmPassword3"
-        type="password"
-        handle={formik}
-      />
+
+      <div className="form-group">
+        <label htmlFor="email">Email address</label>
+        <input
+          id="email"
+          placeholder="Email"
+          required="required"
+          name="lname"
+          className="form-control"
+          type="email"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values['email']}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          placeholder="Password"
+          required="required"
+          name="password"
+          className="form-control"
+          type="password"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values['password']}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="confirmPassword">Repeat Password</label>
+        <input
+          id="confirmPassword"
+          placeholder="Repeat Password"
+          required="required"
+          name="confirmPassword"
+          className="form-control"
+          type="password"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values['confirmPassword']}
+        />
+      </div>
       <div className="account action-container">
         <button
           type="submit"
@@ -106,14 +160,14 @@ const GeneralTab = () => {
           SAVE
         </button>
         <button
-          type="submit"
+          type="reset"
           className="btn btn-primary chat-invite-purple-btn margin-btn"
         >
           CANCEL
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default GeneralTab
+export default GeneralTab;

@@ -1,57 +1,57 @@
-var express = require("express");
-var user = require("../controllers/user");
-var notification = require("../controllers/notification");
-var chat = require("../controllers/chat");
+var express = require('express');
+var user = require('../controllers/user');
+var notification = require('../controllers/notification');
+var chat = require('../controllers/chat');
 var router = express.Router();
-var formidable = require("formidable");
+var formidable = require('formidable');
 
 GET_USER_META_MAX_AGE = 60;
 
-router.get("/:portion", function (req, res) {
+router.get('/:portion', function (req, res) {
   try {
     // console.log('session user : ', req.session.user);
     switch (req.params.portion) {
-      case "friends":
+      case 'friends':
         user.getFriends(req.query.id).then(
           function (friends) {
             res.send(friends);
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
-      case "profile-friends":
+      case 'profile-friends':
         user.getProfileFriends(req.query.id, req.query.profile).then(
           function (friends) {
             res.send(friends);
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
-      case "get-all-users":
+      case 'get-all-users':
         user.getAllUsers(req.query.id, req.query.limit, req.query.offset).then(
           function (users) {
             res.send(users);
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
-      case "blocklist":
+      case 'blocklist':
         user.getBlockList(req.query.email).then(
           function (blockList) {
             res.send(blockList);
           },
           function (err) {
             res.send(err);
-          },
+          }
         );
         break;
-      case "inbox":
+      case 'inbox':
         /*
                 getInbox(req.query.id).then(function(result) {
                 	res.send(result);
@@ -65,59 +65,62 @@ router.get("/:portion", function (req, res) {
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
-      case "notifications":
+      case 'notifications':
         user.getNotifications(req.query.id).then(
           function (result) {
             res.send(result);
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
-      case "microblogs":
+      case 'microblogs':
         user.getMicroblogs(req.query.id).then(
           function (result) {
             res.send(result);
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
-      case "profile":
+      case 'profile':
         user.getUserProfile(req.query.id, req.query.user).then(
           function (userProfile) {
             res.send(userProfile);
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
-      case "meta":
+      case 'meta':
         user.getMeta(req.query.id).then(
           function (meta) {
             res.send(meta);
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
-      case "get-user-meta":
+      case 'get-user-meta':
         user.getUserMeta(req.query.id).then(
           function (meta) {
             var user = meta.user;
-            res.set("Cache-Control", "public, max-age=" + GET_USER_META_MAX_AGE);
+            res.set(
+              'Cache-Control',
+              'public, max-age=' + GET_USER_META_MAX_AGE
+            );
             res.send(user);
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
       default:
@@ -127,16 +130,16 @@ router.get("/:portion", function (req, res) {
           },
           function (err) {
             res.status(err.status).send(err.message);
-          },
+          }
         );
         break;
     }
   } catch (e) {
-    res.status(500).send("Internal server error");
+    res.status(500).send('Internal server error');
   }
 });
 
-router.post("/profilepic/:email", function (req, res) {
+router.post('/profilepic/:email', function (req, res) {
   // since we are receiving a formData form we need to parse it with formidable
   var form = new formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {
@@ -161,115 +164,115 @@ router.post("/profilepic/:email", function (req, res) {
         },
         function (err) {
           res.sendStatus(err.status);
-        },
+        }
       );
     } catch (e) {
-      res.status(500).send("Internal server error");
+      res.status(500).send('Internal server error');
     }
   });
 });
 
-router.post("/friend-request", function (req, res) {
+router.post('/friend-request', function (req, res) {
   try {
     user.addFriendRequest(req.body.id, req.body.friend).then(
       function (user) {
         var data = {
           from: req.body.id,
-          name: user.fname + " " + user.lname,
+          name: user.fname + ' ' + user.lname,
           to: req.body.friend,
         };
-        notification.addNotification("friend-request", data);
-        res.send("Successfully sent");
+        notification.addNotification('friend-request', data);
+        res.send('Successfully sent');
       },
       function (err) {
         res.status(err.status).send(err.message);
-      },
+      }
     );
   } catch (e) {
-    res.status(500).send("Internal server error");
+    res.status(500).send('Internal server error');
   }
 });
 
-router.post("/accept-friend-request", function (req, res) {
+router.post('/accept-friend-request', function (req, res) {
   try {
     user.acceptFriendRequest(req.body.id, req.body.user).then(
       function (user) {
         var data = {
           from: req.body.id,
-          name: user.fname + " " + user.lname,
+          name: user.fname + ' ' + user.lname,
           to: req.body.user,
         };
-        notification.addNotification("accept-friend-request", data);
-        res.send("Successfully accepted");
+        notification.addNotification('accept-friend-request', data);
+        res.send('Successfully accepted');
       },
       function (err) {
         res.status(err.status).send(err.message);
-      },
+      }
     );
   } catch (e) {
-    res.status(500).send("Internal server error");
+    res.status(500).send('Internal server error');
   }
 });
 
-router.post("/unfriend", function (req, res) {
+router.post('/unfriend', function (req, res) {
   try {
     user.unfriend(req.body.id, req.body.user).then(
       function () {
-        res.send("Succesfully unfriended");
+        res.send('Succesfully unfriended');
       },
       function (err) {
         res.status(err.status).send(err.message);
-      },
+      }
     );
   } catch (e) {
-    res.status(500).send("Internal server error");
+    res.status(500).send('Internal server error');
   }
 });
 
-router.post("/update-user-bookmarked-microblogs", function (req, res) {
+router.post('/update-user-bookmarked-microblogs', function (req, res) {
   try {
     user.updateUserBookmarkedMicroblogs(req.body.me, req.body.room).then(
       function () {
-        res.send("Successfully added");
+        res.send('Successfully added');
       },
       function (err) {
         res.status(err.status).send(err.message);
-      },
+      }
     );
   } catch (e) {
-    res.status(500).send("Internal server error");
+    res.status(500).send('Internal server error');
   }
 });
 
-router.post("/unbookmark-microblog", function (req, res) {
+router.post('/unbookmark-microblog', function (req, res) {
   try {
     user.unbookmarkMicroblog(req.body.me, req.body.room).then(
       function () {
-        res.send("Successfully unbookmarked");
+        res.send('Successfully unbookmarked');
       },
       function (err) {
         res.status(err.status).send(err.message);
-      },
+      }
     );
   } catch (e) {
-    res.status(500).send("Internal server error");
+    res.status(500).send('Internal server error');
   }
 });
 
-router.put("/:email", function (req, res) {
+router.put('/:email', function (req, res) {
   user.updateUser(req.params.email, req.body).then(
     function (user) {
       res.send(user);
     },
     function (err) {
       res.send(err);
-    },
+    }
   );
 });
 
-router.delete("/:email", function (req, res) {
+router.delete('/:email', function (req, res) {
   res.send({
-    state: "delete",
+    state: 'delete',
   });
 });
 

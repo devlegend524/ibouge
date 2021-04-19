@@ -1,7 +1,6 @@
 import {
   NEW_PASSWORD_LOADING,
   NEW_PASSWORD_SUCCESS,
-  NEW_PASSWORD_FAILED
 } from '../actions/action_types/restorepassword';
 /**
  * export const RESTORE_EMAIL_LOADING = 'RESTORE_EMAIL_LOADING';
@@ -14,7 +13,7 @@ const initialState = {
   message: null,
 };
 
-const newpasswordReducer = (state = initialState, { type, payload }) => {
+const newpasswordReducer = (state = initialState, {type, payload}) => {
   switch (type) {
     case NEW_PASSWORD_LOADING:
       return {
@@ -31,15 +30,9 @@ const newpasswordReducer = (state = initialState, { type, payload }) => {
         status: true,
         message: payload,
       };
-    case NEW_PASSWORD_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        status: false,
-        message: payload, //payload message ovde i razdvoj logout i fail
-      };
+
     default:
       return state;
   }
-}
+};
 export default newpasswordReducer;

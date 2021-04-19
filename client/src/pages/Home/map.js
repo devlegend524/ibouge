@@ -1,161 +1,141 @@
-import React, { useState, useRef, useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import MapGL, {
-  NavigationControl,
-  GeolocateControl,
-  Source,
-  Layer,
+import React, {useState, useEffect} from 'react'; //{useState, useRef, useCallback}
+import {useHistory} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import L from 'leaflet';
+import {
+  MapContainer,
+  CircleMarker,
+  TileLayer,
   Popup,
-  Marker,
-} from "react-map-gl";
+  LayersControl,
+  ScaleControl,
+  useMapEvents,
+} from 'react-leaflet';
+import GeoCoder from '../../components/GeoCoder';
+import 'leaflet/dist/leaflet.css';
 
-import Geocoder from "react-map-gl-geocoder";
-import { MAPBOX_TOKEN } from "../../constants";
-
-// load helper
-import { getArrayOfGeoJSON } from "../../helpers/utils";
-
-import "mapbox-gl/dist/mapbox-gl.css";
-import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
-
-const navControlStyle = {
-  right: 10,
-  bottom: 50,
-};
-const getControlStyle = {
-  right: 10,
-  bottom: 10,
-};
-
-export const countiesLayer = {
-  id: "user_icon",
-  source: "usersIcons",
-  type: "circle",
-  paint: {
-    "circle-radius": 6,
-    "circle-color": "#329CEC",
-    "circle-opacity": 1,
-  },
-};
-// Highlighted county polygons
-export const highlightLayer = {
-  id: "counties-highlighted",
-  source: "usersIcons",
-  type: "circle",
-  paint: {
-    "circle-radius": 6,
-    "circle-color": "#329CEC",
-    "circle-opacity": 1,
-  },
-};
-
-const Map = (props) => {
+const MapView = (props) => {
+  const history = useHistory();
   const auth = useSelector((state) => state.auth);
-  const defaultUsersData = useSelector((state) => state.users);
-  const [users] = useState(defaultUsersData.users);
-
-  const [viewport, setViewport] = useState({
-    latitude: auth.sess.location?.coordinates[0]
-      ? auth.sess.location?.coordinates[0]
-      : 37.7577,
-    longitude: auth.sess.location?.coordinates[1]
-      ? auth.sess.location?.coordinates[1]
-      : -122.4376,
-    zoom: 12,
+  const [coordinates, setCoordinates] = useState(
+    auth.sess.location.coordinates.length > 0
+      ? auth.sess.location.coordinates
+      : [37.7577, -122.4376]
+  );
+  const [geoData, setGeoData] = useState(props.data);
+  const [mapBound, setMapBound] = useState({
+    nE_lat: '',
+    nE_lng: '',
+    sW_lat: '',
+    sW_lng: '',
   });
-
-  const [geojson, setGeoJson] = useState({
-    type: "FeatureCollection",
-    features: getArrayOfGeoJSON(users),
-  });
-  const finalUsers = [];
-
-  const mapRef = useRef();
-  const handleViewportChange = useCallback((newViewport) => {
-    if (newViewport.longitude > 0) {
-      newViewport.longitude = 0;
+  useEffect(() => {
+    setGeoData(props.data);
+  }, [props.data]);
+  const filterData = () => {
+    let filtered;
+    if (props.data.length > 0 && mapBound.nE_lat !== '') {
+      filtered = props.data.filter((item) => {
+        return (
+          item.geometry.coordinates[0] > mapBound.sW_lat &&
+          item.geometry.coordinates[0] < mapBound.nE_lat &&
+          item.geometry.coordinates[1] > mapBound.sW_lng &&
+          item.geometry.coordinates[1] < mapBound.nE_lng
+        );
+      });
+      setGeoData(filtered);
+      props.handleFilteredData(filtered);
     }
-    setViewport(newViewport);
-    // const usersOnMap = mapRef.current.queryRenderedFeatures();
-    // if (usersOnMap) {
-    //   const uniqueUsers = getUniqueIcons(usersOnMap);
-    //   for (let i = 0; i < uniqueUsers.length; i++) {
-    //     for (let j = 0; j < users.length; j++) {
-    //       if (uniqueUsers[i].properties.user_id === users[j]._id) {
-    //         finalUsers.push(users[j]);
-    //         break;
-    //       }
-    //     }
-    //   }
-    // }
-    // setGeoJson({
-    //   type: "FeatureCollection",
-    //   features: getArrayOfGeoJSON(finalUsers),
-    // });
-  }, []);
+  };
+  useEffect(() => {
+    filterData();
+  }, [mapBound]);
 
-  const handleGeocoderViewportChange = useCallback((newViewport) => {
-    const geocoderDefaultOverrides = { transitionDuration: 1000 };
-    return handleViewportChange({
-      ...newViewport,
-      ...geocoderDefaultOverrides,
+  const MyComponent = () => {
+    let mapBound;
+    const map = useMapEvents({
+      click: (e) => {
+        map.setView(e.latlng);
+        map.flyTo(e.latlng);
+        map.locate();
+        mapBound = map.getBounds();
+        setMapBound({
+          nE_lat: mapBound._northEast.lat,
+          nE_lng: mapBound._northEast.lng,
+          sW_lat: mapBound._southWest.lat,
+          sW_lng: mapBound._southWest.lng,
+        });
+      },
+      locationfound: (location) => {
+        console.log('location found:', location);
+      },
+      moveend: (event) => {
+        mapBound = map.getBounds();
+        setMapBound({
+          nE_lat: mapBound._northEast.lat,
+          nE_lng: mapBound._northEast.lng,
+          sW_lat: mapBound._southWest.lat,
+          sW_lng: mapBound._southWest.lng,
+        });
+      },
     });
-  }, []);
-  const [hoverInfo, setHoverInfo] = useState(null);
-
-  const onHover = useCallback((event) => {
-    const user = event.features && event.features[0];
-    setHoverInfo({
-      longitude: event.lngLat[0],
-      latitude: event.lngLat[1],
-      countyName: user && user.properties.description,
-    });
-  }, []);
-
-  const selectedCounty = (hoverInfo && hoverInfo.countyName) || "";
-  const filter = useMemo(() => ["in", "user_icon", selectedCounty], [
-    selectedCounty,
-  ]);
-
+    map.zoomControl.setPosition('bottomright');
+    return null;
+  };
+  const onClickCircle = (userId) => {
+    history.push(`profile/${userId}`);
+  };
   return (
-    <div style={{ height: "90vh" }}>
-      <MapGL
-        ref={mapRef}
-        {...viewport}
-        width={props.width}
-        height={props.height}
-        onViewportChange={handleViewportChange}
-        onHover={onHover}
-        interactiveLayerIds={["user_icon"]}
-        mapStyle="https://api.maptiler.com/maps/positron/style.json?key=RGierAHokphISswP6JTB"
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+    <>
+      <MapContainer
+        style={{height: props.height, width: '100%', marginTop: '58px'}}
+        zoom={9}
+        center={coordinates}
       >
-        <Geocoder
-          mapRef={mapRef}
-          onViewportChange={handleGeocoderViewportChange}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-          position="top-right"
-        />
-        <Source id="usersIcons" type="geojson" data={geojson}>
-          <Layer {...countiesLayer} />
-          <Layer {...highlightLayer} filter={filter} />
-        </Source>
-        {selectedCounty && (
-          <Popup
-            longitude={hoverInfo.longitude}
-            latitude={hoverInfo.latitude}
-            closeButton={false}
-            className="county-info"
-          >
-            <div dangerouslySetInnerHTML={{ __html: selectedCounty }}></div>
-          </Popup>
-        )}
-        {/* {markers} */}
-        <NavigationControl style={navControlStyle} />
-        <GeolocateControl style={getControlStyle} />
-      </MapGL>
-    </div>
+        <LayersControl position="topright">
+          <LayersControl.BaseLayer name="Color Map">
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer checked name="GrayScale Map">
+            <TileLayer url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png" />
+          </LayersControl.BaseLayer>
+        </LayersControl>
+        {geoData &&
+          geoData.map((item, k) => {
+            if (item.geometry.coordinates.length > 0) {
+              return (
+                <CircleMarker
+                  key={k}
+                  center={item.geometry.coordinates}
+                  radius={5}
+                  color={
+                    props.type === 'users'
+                      ? 'blue'
+                      : props.type === 'blogs'
+                      ? 'red'
+                      : 'green'
+                  }
+                  fillOpacity={0.8}
+                  stroke={false}
+                  onClick={(e) => onClickCircle(item.properties.user_id)}
+                >
+                  <Popup>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.properties.description,
+                      }}
+                    ></div>
+                  </Popup>
+                </CircleMarker>
+              );
+            }
+          })}
+        <ScaleControl />
+        <GeoCoder />
+        <MyComponent />
+      </MapContainer>
+    </>
   );
 };
 
-export default Map;
+export default MapView;

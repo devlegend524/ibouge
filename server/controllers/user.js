@@ -1,19 +1,19 @@
-var mongoose = require("mongoose");
-var User = mongoose.model("User");
-var Friend = mongoose.model("Friend");
-var Chat = mongoose.model("Chat");
-var Notification = mongoose.model("Notification");
-var Microblog = mongoose.model("Microblog");
-var fileHandler = require("../services/fileHandler");
-var mailer = require("../services/mailer.js");
-var util = require("../services/util.js");
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
+var Friend = mongoose.model('Friend');
+var Chat = mongoose.model('Chat');
+var Notification = mongoose.model('Notification');
+var Microblog = mongoose.model('Microblog');
+var fileHandler = require('../services/fileHandler');
+var mailer = require('../services/mailer.js');
+var util = require('../services/util.js');
 
 // Load the AWS SDK for Node.js
-var AWS = require("aws-sdk");
+var AWS = require('aws-sdk');
 // Load fs to read incoming file
-var fs = require("fs");
+var fs = require('fs');
 // Load randomatic library
-var randomize = require("randomatic");
+var randomize = require('randomatic');
 var path = require('path');
 var dirPath = path.join(__dirname, '../../config/config.json');
 
@@ -29,7 +29,7 @@ module.exports = {
       if (!email) {
         return reject({
           status: 401,
-          message: "Invalid data",
+          message: 'Invalid data',
         });
       }
 
@@ -41,12 +41,12 @@ module.exports = {
           if (err || !user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
           return resolve(user);
-        },
+        }
       );
     });
   },
@@ -55,7 +55,7 @@ module.exports = {
       if (!id) {
         return reject({
           status: 401,
-          message: "Invalid data",
+          message: 'Invalid data',
         });
       }
 
@@ -67,12 +67,12 @@ module.exports = {
           if (err || !user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
           return resolve(user);
-        },
+        }
       );
     });
   },
@@ -87,16 +87,16 @@ module.exports = {
           if (err || !user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
           var meta = {};
 
           Chat.findOne(
             {
-              "users.user_id": myId,
+              'users.user_id': myId,
             },
-            ["last_updated_date", "messages", "users", "is_group_chat"],
+            ['last_updated_date', 'messages', 'users', 'is_group_chat'],
             {
               sort: {
                 last_updated_date: -1,
@@ -109,7 +109,7 @@ module.exports = {
                     $in: [myId],
                   },
                 },
-                ["date"],
+                ['date'],
                 {
                   sort: {
                     date: -1,
@@ -162,14 +162,14 @@ module.exports = {
                     default:
                       return reject({
                         status: 500,
-                        message: "Internal server error",
+                        message: 'Internal server error',
                       });
                   }
-                },
+                }
               );
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -183,18 +183,18 @@ module.exports = {
         {
           _id: id,
         },
-        ["fname", "lname", "profile_pic"],
+        ['fname', 'lname', 'profile_pic'],
         function (err, user) {
           if (err || !user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
           meta.user = user;
           return resolve(meta);
-        },
+        }
       );
     });
   },
@@ -205,7 +205,7 @@ module.exports = {
         if (err) {
           return reject({
             status: 500,
-            message: "Internal server error",
+            message: 'Internal server error',
           });
         }
 
@@ -226,25 +226,25 @@ module.exports = {
 
           Object.keys(data).forEach(function (key) {
             switch (key) {
-              case "ip":
-              case "latitude":
-              case "longitude":
-              case "activation_status":
-              case "area_name":
-              case "account_type":
-              case "area_id":
+              case 'ip':
+              case 'latitude':
+              case 'longitude':
+              case 'activation_status':
+              case 'area_name':
+              case 'account_type':
+              case 'area_id':
                 user[key] = data[key];
                 break;
 
-              case "profile":
+              case 'profile':
                 var profile = data[key];
                 Object.keys(profile).forEach(function (profileKey) {
                   switch (profileKey) {
-                    case "about_me":
-                    case "interests":
-                    case "languages":
-                    case "website":
-                    case "phone":
+                    case 'about_me':
+                    case 'interests':
+                    case 'languages':
+                    case 'website':
+                    case 'phone':
                       user[key][profileKey] = profile[profileKey];
                       break;
                     default:
@@ -253,16 +253,16 @@ module.exports = {
                 });
                 break;
 
-              case "privacy":
+              case 'privacy':
                 var privacy = data[key];
                 Object.keys(privacy).forEach(function (privacyKey) {
                   switch (privacyKey) {
-                    case "only_members_see_profile":
-                    case "share_recent_events":
-                    case "show_my_friends":
-                    case "is_profile_public":
-                    case "new_messages":
-                    case "block_list":
+                    case 'only_members_see_profile':
+                    case 'share_recent_events':
+                    case 'show_my_friends':
+                    case 'is_profile_public':
+                    case 'new_messages':
+                    case 'block_list':
                       user[key][privacyKey] = privacy[privacyKey];
                       break;
                     default:
@@ -271,16 +271,17 @@ module.exports = {
                 });
                 break;
 
-              case "notifications":
+              case 'notifications':
                 var notifications = data[key];
                 Object.keys(notifications).forEach(function (notificationsKey) {
                   switch (notificationsKey) {
-                    case "new_messages":
-                    case "new_events":
-                    case "friend_requests":
-                    case "invitations_to_conversation":
-                    case "mutual_likes":
-                      user[key][notificationsKey] = notifications[notificationsKey];
+                    case 'new_messages':
+                    case 'new_events':
+                    case 'friend_requests':
+                    case 'invitations_to_conversation':
+                    case 'mutual_likes':
+                      user[key][notificationsKey] =
+                        notifications[notificationsKey];
                       break;
                     default:
                       break;
@@ -288,23 +289,24 @@ module.exports = {
                 });
                 break;
 
-              case "location":
+              case 'location':
                 var location = data[key];
                 Object.keys(location).forEach(function (locationKey) {
+                  console.log(locationKey);
                   switch (locationKey) {
-                    case "coordinates":
-                    case "bbox":
-                    case "addrs1":
-                    case "addrs2":
-                    case "country":
-                    case "state":
-                    case "city":
-                    case "zip":
-                    case "lastCityFollowed":
-                    case "cityToFollow":
-                    case "extraCityToFollow0":
-                    case "extraCityToFollow1":
-                    case "extraCityToFollow2":
+                    case 'coordinates':
+                    case 'bbox':
+                    case 'addrs1':
+                    case 'addrs2':
+                    case 'country':
+                    case 'state':
+                    case 'city':
+                    case 'zip':
+                    case 'lastCityFollowed':
+                    case 'cityToFollow':
+                    case 'extraCityToFollow0':
+                    case 'extraCityToFollow1':
+                    case 'extraCityToFollow2':
                       user[key][locationKey] = location[locationKey];
                       break;
                     default:
@@ -324,7 +326,7 @@ module.exports = {
             }
             return resolve(user);
           });
-        },
+        }
       );
     });
   },
@@ -335,23 +337,23 @@ module.exports = {
       if (!email || !data) {
         return reject({
           status: 401,
-          message: "data not found",
+          message: 'data not found',
         });
       }
 
       // if file was received
       if (data.file) {
         // this will hold the string given back by the s3bucket.load function
-        var linkToPhoto = "";
+        var linkToPhoto = '';
 
         // name of the album + a forward slash
-        var albumPhotosKey = encodeURIComponent(data.albumName) + "/";
+        var albumPhotosKey = encodeURIComponent(data.albumName) + '/';
 
         // this will hold the random generated string
-        var generatedString = "";
+        var generatedString = '';
 
         // while the generatedString is empty
-        while (generatedString === "") {
+        while (generatedString === '') {
           // get current time
           var currentTime = new Date().getTime();
 
@@ -363,8 +365,8 @@ module.exports = {
         }
 
         // if generatedString is no longer empty
-        if (generatedString !== "") {
-          var photoKey = albumPhotosKey + data.userId + "_" + generatedString;
+        if (generatedString !== '') {
+          var photoKey = albumPhotosKey + data.userId + '_' + generatedString;
 
           function setProfilePic(file, photoKey, isOriginal) {
             fs.readFile(file.path, function (err, fileData) {
@@ -374,10 +376,10 @@ module.exports = {
               }
 
               var params = {
-                Bucket: "ibouge",
+                Bucket: 'ibouge',
                 Key: photoKey,
                 Body: fileData,
-                ACL: "public-read",
+                ACL: 'public-read',
               };
               console.log(params);
 
@@ -385,10 +387,13 @@ module.exports = {
               s3bucket.upload(params, function (err, photo) {
                 // if error occurs
                 if (err) {
-                  console.log("error happened while saving file to s3 bucket: ", err);
+                  console.log(
+                    'error happened while saving file to s3 bucket: ',
+                    err
+                  );
                   return reject({
                     status: 500,
-                    message: "Internal server error",
+                    message: 'Internal server error',
                   });
                 }
                 // else, if photo saves successfully
@@ -422,14 +427,14 @@ module.exports = {
                       if (err) {
                         return reject({
                           status: 500,
-                          message: "Internal server error",
+                          message: 'Internal server error',
                         });
                       }
                       if (!isOriginal) {
-                        console.log("resolving user");
+                        console.log('resolving user');
                         return resolve(user);
                       }
-                    },
+                    }
                   );
                 }
               });
@@ -437,11 +442,12 @@ module.exports = {
           }
 
           if (data.file) {
-            var photoKey = albumPhotosKey + data.userId + "_" + generatedString;
+            var photoKey = albumPhotosKey + data.userId + '_' + generatedString;
             setProfilePic(data.file, photoKey, false);
           }
           if (data.originalFile) {
-            var photoKey = albumPhotosKey + data.userId + "_original_" + generatedString;
+            var photoKey =
+              albumPhotosKey + data.userId + '_original_' + generatedString;
             setProfilePic(data.originalFile, photoKey, true);
           }
         }
@@ -461,7 +467,7 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
@@ -481,19 +487,26 @@ module.exports = {
                 $in: userIds,
               },
             },
-            ["fname", "lname", "is_online", "profile_pic", "location", "profile"],
+            [
+              'fname',
+              'lname',
+              'is_online',
+              'profile_pic',
+              'location',
+              'profile',
+            ],
             function (err, users) {
               if (err) {
                 return reject({
                   status: 500,
-                  message: "Internal server error",
+                  message: 'Internal server error',
                 });
               }
 
               return resolve(users);
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -509,14 +522,14 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
@@ -524,19 +537,19 @@ module.exports = {
             {
               _id: profileId,
             },
-            ["privacy.show_my_friends"],
+            ['privacy.show_my_friends'],
             function (err, profileUser) {
               if (err) {
                 return reject({
                   status: 500,
-                  message: "Internal server error",
+                  message: 'Internal server error',
                 });
               }
 
               if (!profileUser) {
                 return reject({
                   status: 404,
-                  message: "User not found",
+                  message: 'User not found',
                 });
               }
 
@@ -554,7 +567,7 @@ module.exports = {
                   if (err) {
                     return reject({
                       status: 500,
-                      message: "Internal server error",
+                      message: 'Internal server error',
                     });
                   }
 
@@ -574,23 +587,23 @@ module.exports = {
                         $in: userIds,
                       },
                     },
-                    ["fname", "lname", "is_online", "profile_pic"],
+                    ['fname', 'lname', 'is_online', 'profile_pic'],
                     function (err, users) {
                       if (err) {
                         return reject({
                           status: 500,
-                          message: "Internal server error",
+                          message: 'Internal server error',
                         });
                       }
 
                       return resolve(users);
-                    },
+                    }
                   );
-                },
+                }
               );
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -602,9 +615,18 @@ module.exports = {
       User.find(
         {
           is_activated: true,
-          "privacy.is_profile_public": true,
+          'privacy.is_profile_public': true,
         },
-        ["dob", "location", "fname", "lname", "profile_pic", "gender", "profile.interests", "is_online"],
+        [
+          'dob',
+          'location',
+          'fname',
+          'lname',
+          'profile_pic',
+          'gender',
+          'profile.interests',
+          'is_online',
+        ],
         {
           skip: offset,
           limit: limit,
@@ -613,11 +635,11 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
           return resolve(friends);
-        },
+        }
       );
     });
   },
@@ -628,7 +650,7 @@ module.exports = {
         {
           email: email,
         },
-        "privacy.block_list",
+        'privacy.block_list',
         function (err, blockList) {
           if (err) {
             return reject(err);
@@ -649,9 +671,9 @@ module.exports = {
                 return reject(err);
               }
               return resolve(users);
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -667,23 +689,28 @@ module.exports = {
             return reject(err);
           }
 
-          var activationToken = new Buffer(email + "," + new Date().getTime()).toString("base64");
+          var activationToken = new Buffer(
+            email + ',' + new Date().getTime()
+          ).toString('base64');
           user.activation_token = activationToken;
 
           mailer
             .sendMail(
-              "support@ibouge.com",
+              'support@ibouge.com',
               email,
               mailer.introSubject,
-              mailer.introBody(user, "https://localhost:3000/login?token=" + activationToken),
+              mailer.introBody(
+                user,
+                'https://localhost:3000/login?token=' + activationToken
+              )
             )
             .then(
               function () {
-                console.log("mail to", email, "sent");
+                console.log('mail to', email, 'sent');
               },
               function (error) {
-                console.log("mail sending to", email, "failed: ", error);
-              },
+                console.log('mail sending to', email, 'failed: ', error);
+              }
             );
 
           user.save(function (err) {
@@ -692,7 +719,7 @@ module.exports = {
             }
             return resolve(user);
           });
-        },
+        }
       );
     });
   },
@@ -717,7 +744,7 @@ module.exports = {
             }
             return resolve(user);
           });
-        },
+        }
       );
     });
   },
@@ -730,7 +757,7 @@ module.exports = {
         },
         function (err, user) {
           if (err || !user) {
-            return reject("User not found");
+            return reject('User not found');
           }
 
           // create token
@@ -742,17 +769,18 @@ module.exports = {
           mailer
             .sendSupportMail(
               email,
-              "Reset iBouge password",
-              "https://localhost:3000/#/newpassword?token=" + encodeURIComponent(hashToken),
-              60,
+              'Reset iBouge password',
+              'https://localhost:3000/#/newpassword?token=' +
+                encodeURIComponent(hashToken),
+              60
             )
             .then(
               function (info) {
-                console.log("email sent:", hashToken);
+                console.log('email sent:', hashToken);
               },
               function (err) {
-                console.log("email sent failed:", err);
-              },
+                console.log('email sent failed:', err);
+              }
             );
 
           user.save(function (err) {
@@ -761,7 +789,7 @@ module.exports = {
             }
             return resolve(user);
           });
-        },
+        }
       );
     });
   },
@@ -774,11 +802,11 @@ module.exports = {
         },
         function (err, user) {
           if (err || !user) {
-            return reject("User not found");
+            return reject('User not found');
           }
 
           if (token != user.password_restore_token) {
-            return reject("Invalid token");
+            return reject('Invalid token');
           }
 
           user.password = util.createHash(password);
@@ -789,7 +817,7 @@ module.exports = {
             }
             return resolve(user);
           });
-        },
+        }
       );
     });
   },
@@ -805,12 +833,12 @@ module.exports = {
           if (err || !user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
           return resolve(user);
-        },
+        }
       );
     });
   },
@@ -818,12 +846,12 @@ module.exports = {
   search: function (q, options) {
     return new Promise((resolve, reject) => {
       // console.log('q', q);
-      var re = new RegExp("^" + q, "gi");
+      var re = new RegExp('^' + q, 'gi');
       // console.log("re: ", re);
       User.find(
         {
           is_activated: true,
-          "privacy.is_profile_public": true,
+          'privacy.is_profile_public': true,
           $or: [
             {
               fname: re,
@@ -837,12 +865,12 @@ module.exports = {
           if (err || !users) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
           return resolve(users);
-        },
+        }
       );
     });
   },
@@ -862,7 +890,7 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
@@ -878,11 +906,13 @@ module.exports = {
           if (!user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
-          var friendRequests = user.friend_requests_sent ? user.friend_requests_sent : [];
+          var friendRequests = user.friend_requests_sent
+            ? user.friend_requests_sent
+            : [];
 
           if (friendRequests.indexOf(friendId) < 0) {
             friendRequests.push(friendId);
@@ -894,7 +924,7 @@ module.exports = {
             if (err) {
               return reject({
                 status: 500,
-                message: "Internal server error",
+                message: 'Internal server error',
               });
             }
 
@@ -902,7 +932,7 @@ module.exports = {
           });
 
           mailer.friendReqMail(user, friend);
-        },
+        }
       );
     });
   },
@@ -917,24 +947,26 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
-          var microblogs = user.bookmarked_microblogs ? user.bookmarked_microblogs : [];
+          var microblogs = user.bookmarked_microblogs
+            ? user.bookmarked_microblogs
+            : [];
 
           for (var i = 0; i < microblogs.length; i++) {
             if (microblogRoom === microblogs[i]) {
               return reject({
                 status: 401,
-                message: "microblog has already been added",
+                message: 'microblog has already been added',
               });
             }
           }
@@ -948,12 +980,12 @@ module.exports = {
             if (err) {
               return reject({
                 status: 500,
-                message: "Internal server error",
+                message: 'Internal server error',
               });
             }
             return resolve(user);
           });
-        },
+        }
       );
     });
   },
@@ -968,18 +1000,18 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
-          User.update(
+          User.updateOne(
             {
               _id: userId,
             },
@@ -992,19 +1024,19 @@ module.exports = {
               if (err) {
                 // console.log('Update user failed :', err);
               }
-            },
+            }
           );
 
           user.save(function (err) {
             if (err) {
               return reject({
                 status: 500,
-                message: "Internal server error",
+                message: 'Internal server error',
               });
             }
             return resolve(user);
           });
-        },
+        }
       );
     });
   },
@@ -1019,14 +1051,14 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
@@ -1038,14 +1070,14 @@ module.exports = {
               if (err) {
                 return reject({
                   status: 500,
-                  message: "Internal server error",
+                  message: 'Internal server error',
                 });
               }
 
               if (!profileUser) {
                 return reject({
                   status: 404,
-                  message: "User not found",
+                  message: 'User not found',
                 });
               }
 
@@ -1061,14 +1093,20 @@ module.exports = {
                   if (err) {
                     return reject({
                       status: 500,
-                      message: "Internal server error",
+                      message: 'Internal server error',
                     });
                   }
 
                   if (!friend) {
-                    if (profileUser.friend_requests_sent && profileUser.friend_requests_sent.indexOf(myId) > -1) {
+                    if (
+                      profileUser.friend_requests_sent &&
+                      profileUser.friend_requests_sent.indexOf(myId) > -1
+                    ) {
                       friend_status = 2;
-                    } else if (user.friend_requests_sent && user.friend_requests_sent.indexOf(userId) > -1) {
+                    } else if (
+                      user.friend_requests_sent &&
+                      user.friend_requests_sent.indexOf(userId) > -1
+                    ) {
                       friend_status = 1;
                     }
                   } else {
@@ -1081,11 +1119,11 @@ module.exports = {
                   };
 
                   return resolve(res);
-                },
+                }
               );
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -1100,14 +1138,14 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
@@ -1119,14 +1157,14 @@ module.exports = {
               if (err) {
                 return reject({
                   status: 500,
-                  message: "Internal server error",
+                  message: 'Internal server error',
                 });
               }
 
               if (!friendUser) {
                 return reject({
                   status: 404,
-                  message: "User not found",
+                  message: 'User not found',
                 });
               }
 
@@ -1141,7 +1179,7 @@ module.exports = {
                   if (err) {
                     return reject({
                       status: 500,
-                      message: "Internal server error",
+                      message: 'Internal server error',
                     });
                   }
 
@@ -1153,12 +1191,12 @@ module.exports = {
                       if (err) {
                         return reject({
                           status: 500,
-                          message: "Internal server error",
+                          message: 'Internal server error',
                         });
                       }
 
                       // update friendUser's document
-                      User.update(
+                      User.updateOne(
                         {
                           _id: userId,
                         },
@@ -1171,7 +1209,7 @@ module.exports = {
                           if (err) {
                             // console.log('Update friend user faild :', err);
                           }
-                        },
+                        }
                       );
 
                       return resolve(user);
@@ -1179,11 +1217,11 @@ module.exports = {
                   } else {
                     return resolve(user);
                   }
-                },
+                }
               );
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -1198,14 +1236,14 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
@@ -1217,14 +1255,14 @@ module.exports = {
               if (err) {
                 return reject({
                   status: 500,
-                  message: "Internal server error",
+                  message: 'Internal server error',
                 });
               }
 
               if (!friendUser) {
                 return reject({
                   status: 404,
-                  message: "User not found",
+                  message: 'User not found',
                 });
               }
 
@@ -1239,7 +1277,7 @@ module.exports = {
                   if (err) {
                     return reject({
                       status: 500,
-                      message: "Internal server error",
+                      message: 'Internal server error',
                     });
                   }
 
@@ -1252,12 +1290,12 @@ module.exports = {
                         if (err) {
                           return reject({
                             status: 500,
-                            message: "Internal server error",
+                            message: 'Internal server error',
                           });
                         }
 
                         // update friendUser's document
-                        // User.update({'_id': userId}, {
+                        // User.updateOne({'_id': userId}, {
                         //     $pullAll: {'friend_requests_sent': [myId]}
                         // }, function(err) {
                         //     if (err) {
@@ -1265,16 +1303,16 @@ module.exports = {
                         //     }
                         // });
                         return resolve(user);
-                      },
+                      }
                     );
                   } else {
                     return resolve(user);
                   }
-                },
+                }
               );
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -1289,18 +1327,18 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!_user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
-          User.update(
+          User.updateOne(
             {
               _id: myId,
             },
@@ -1313,12 +1351,12 @@ module.exports = {
               if (err) {
                 // console.log('update user failed :', err);
               }
-            },
+            }
           );
 
           Chat.find(
             {
-              "users.user_id": myId,
+              'users.user_id': myId,
               messages: {
                 $exists: true,
                 $ne: [],
@@ -1338,7 +1376,7 @@ module.exports = {
               if (err) {
                 return reject({
                   status: 500,
-                  message: "Internal server error",
+                  message: 'Internal server error',
                 });
               }
 
@@ -1349,7 +1387,9 @@ module.exports = {
               for (var i = 0; i < chats.length; i++) {
                 var _users = chats[i].users
                   .filter(function (item) {
-                    return item.user_id != myId && tempArr.indexOf(item.user_id) < 0;
+                    return (
+                      item.user_id != myId && tempArr.indexOf(item.user_id) < 0
+                    );
                   })
                   .map(function (item) {
                     return item.user_id;
@@ -1367,7 +1407,7 @@ module.exports = {
                   if (err) {
                     return reject({
                       status: 500,
-                      message: "Internal server error",
+                      message: 'Internal server error',
                     });
                   }
 
@@ -1377,7 +1417,9 @@ module.exports = {
                       var chatItem = chats[i];
 
                       if (!chatItem.is_group_chat) {
-                        var otherUserId = chatItem.users.filter(function (item) {
+                        var otherUserId = chatItem.users.filter(function (
+                          item
+                        ) {
                           return item.user_id != myId;
                         })[0];
                         var otherUser = users.filter(function (item) {
@@ -1391,7 +1433,7 @@ module.exports = {
                           room: chatItem.room,
                           users: chatItem.users,
                           _id: chatItem._id,
-                          name: otherUser.fname + " " + otherUser.lname,
+                          name: otherUser.fname + ' ' + otherUser.lname,
                           image: otherUser.profile_pic,
                           is_online: otherUser.is_online,
                         });
@@ -1428,11 +1470,11 @@ module.exports = {
                     }
                   }
                   return resolve(resArr);
-                },
+                }
               );
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -1447,18 +1489,18 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!_user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
-          // User.update({'_id': myId}, {$set: {'inbox_last_viewed_time': Date.now()}},
+          // User.updateOne({'_id': myId}, {$set: {'inbox_last_viewed_time': Date.now()}},
           //     function(err) {
           //         if (err) {
           //             // console.log('update user failed :', err);
@@ -1478,7 +1520,7 @@ module.exports = {
               if (err) {
                 return reject({
                   status: 500,
-                  message: "Internal server error",
+                  message: 'Internal server error',
                 });
               }
 
@@ -1489,7 +1531,9 @@ module.exports = {
               for (var i = 0; i < microblogs.length; i++) {
                 var _users = microblogs[i].users
                   .filter(function (item) {
-                    return item.user_id != myId && tempArr.indexOf(item.user_id) < 0;
+                    return (
+                      item.user_id != myId && tempArr.indexOf(item.user_id) < 0
+                    );
                   })
                   .map(function (item) {
                     return item.user_id;
@@ -1507,7 +1551,7 @@ module.exports = {
                   if (err) {
                     return reject({
                       status: 500,
-                      message: "Internal server error",
+                      message: 'Internal server error',
                     });
                   }
 
@@ -1517,7 +1561,9 @@ module.exports = {
                       var microblogItem = microblogs[i];
 
                       if (!microblogItem.is_microblog) {
-                        var otherUserId = microblogItem.users.filter(function (item) {
+                        var otherUserId = microblogItem.users.filter(function (
+                          item
+                        ) {
                           return item.user_id != myId;
                         })[0];
                         var otherUser = users.filter(function (item) {
@@ -1531,7 +1577,7 @@ module.exports = {
                           room: microblogItem.room,
                           users: microblogItem.users,
                           _id: microblogItem._id,
-                          name: otherUser.fname + " " + otherUser.lname,
+                          name: otherUser.fname + ' ' + otherUser.lname,
                           image: otherUser.profile_pic,
                           is_online: otherUser.is_online,
                         });
@@ -1569,11 +1615,11 @@ module.exports = {
                     }
                   }
                   return resolve(resArr);
-                },
+                }
               );
-            },
+            }
           );
-        },
+        }
       );
     });
   },
@@ -1588,18 +1634,18 @@ module.exports = {
           if (err) {
             return reject({
               status: 500,
-              message: "Internal server error",
+              message: 'Internal server error',
             });
           }
 
           if (!user) {
             return reject({
               status: 404,
-              message: "User not found",
+              message: 'User not found',
             });
           }
 
-          User.update(
+          User.updateOne(
             {
               _id: myId,
             },
@@ -1612,7 +1658,7 @@ module.exports = {
               if (err) {
                 // console.log('update user failed :', err);
               }
-            },
+            }
           );
 
           Notification.find(
@@ -1631,7 +1677,7 @@ module.exports = {
               if (err) {
                 return reject({
                   status: 500,
-                  message: "Internal server error",
+                  message: 'Internal server error',
                 });
               }
               var userIds = [];
@@ -1643,23 +1689,23 @@ module.exports = {
                 var key = null;
                 var type = notification.type;
                 switch (type) {
-                  case "friend-request":
-                    key = "from";
+                  case 'friend-request':
+                    key = 'from';
                     break;
-                  case "create-group-chat":
-                    key = "created_by";
+                  case 'create-group-chat':
+                    key = 'created_by';
                     break;
-                  case "accept-friend-request":
-                    key = "from";
+                  case 'accept-friend-request':
+                    key = 'from';
                     break;
-                  case "invite-friend-to-microblog":
-                    key = "created_by";
+                  case 'invite-friend-to-microblog':
+                    key = 'created_by';
                     break;
-                  case "like-request":
-                    key = "from";
+                  case 'like-request':
+                    key = 'from';
                     break;
-                  case "reply-request":
-                    key = "from";
+                  case 'reply-request':
+                    key = 'from';
                     break;
                 }
                 for (var n = 0; n < meta.length; n++) {
@@ -1681,12 +1727,12 @@ module.exports = {
                     $in: userIds,
                   },
                 },
-                ["profile_pic"],
+                ['profile_pic'],
                 function (err, users) {
                   if (err) {
                     return reject({
                       status: 500,
-                      message: "Internal server error",
+                      message: 'Internal server error',
                     });
                   }
 
@@ -1694,7 +1740,9 @@ module.exports = {
                   for (var m = 0; m < notifications.length; m++) {
                     var clonedNotification = notifications[m].getJSON();
                     for (var t = 0; t < users.length; t++) {
-                      if (notifUserMap[clonedNotification._id] == users[t]._id) {
+                      if (
+                        notifUserMap[clonedNotification._id] == users[t]._id
+                      ) {
                         clonedNotification.image = users[t].profile_pic;
                         break;
                       }
@@ -1703,11 +1751,11 @@ module.exports = {
                   }
 
                   return resolve(clinedNotifications);
-                },
+                }
               );
-            },
+            }
           );
-        },
+        }
       );
     });
   },

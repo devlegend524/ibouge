@@ -1,13 +1,11 @@
-import {
-  SET_PAGE_TITLE,
-} from '../actions/types';
+import {SET_PAGE_TITLE} from '../actions/action_types/common';
 
 const initialState = {
   title: null,
   appLoaded: false,
 };
 
-const commomReducer = (state = initialState, { type, payload }) => {
+const commomReducer = (state = initialState, {type, payload}) => {
   switch (type) {
     case SET_PAGE_TITLE:
       return {
@@ -17,5 +15,5 @@ const commomReducer = (state = initialState, { type, payload }) => {
     default:
       return state;
   }
-}
+};
 export default commomReducer;

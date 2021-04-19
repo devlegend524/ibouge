@@ -1,0 +1,85 @@
+    @media (max-width: 767px) {
+      .modal-dialog {
+        /* margin: 105px; */
+      }
+    }
+
+    .microbloggers {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      left: -70px;
+      bottom: 0;
+      height: 450px;
+      width: 55px;
+      padding: 2px;
+      background: transparent;
+
+    }
+
+    .modal-dialog {
+      margin-top: 80px;
+      /* width: 80%; */
+    }
+
+    .modal-content {
+      border-radius: 9px;
+    }
+
+    .ibg-btn.ibg-btn-create {
+      background-color: rgba(98, 71, 159, 0.9);
+      border-color: rgba(98, 71, 159, 1);
+    }
+
+    .existing-groups div {
+      text-align: left;
+    }
+
+    .acceptedInviteHeight {
+      height: 600px;
+    }
+
+    .hasNotAccepted {
+      height: 500px;
+    }
+
+    /* This style is added to the invite button in the microblog depending on if there is anybody to invite or not */
+    .invite-button-orange {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: -webkit-linear-gradient(left, #fa834b 0%, #fab04b 100%);
+      border: #fa834b;
+      color: #FFFFFF;
+      font-size: 11px;
+    }
+
+    .invite-button-faded {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: -webkit-linear-gradient(left, #fa834b 0%, #fab04b 100%);
+      border: #fa834b;
+      color: #FFFFFF;
+      font-size: 11px;
+      opacity: 0.4
+    }
+
+    .inputfile {
+      width: 0;
+      height: 0;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+      cursor: pointer;
+    }
+
+    .send-image-button:focus,
+    :active {
+      outline: none;
+    }
+
+    .send-image-button:focus {
+      outline: none;
+    }

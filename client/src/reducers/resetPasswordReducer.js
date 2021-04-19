@@ -1,8 +1,7 @@
 import {
   RESET_PASSWORD_LOADING,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAILED,
-  SET_RESTORE_EMAIL
+  SET_RESTORE_EMAIL,
 } from '../actions/action_types/restorepassword';
 /**
  * export const RESTORE_EMAIL_LOADING = 'RESTORE_EMAIL_LOADING';
@@ -16,7 +15,7 @@ const initialState = {
   message: null,
 };
 
-const resetPasswordReducer = (state = initialState, { type, payload }) => {
+const resetPasswordReducer = (state = initialState, {type, payload}) => {
   switch (type) {
     case RESET_PASSWORD_LOADING:
       return {
@@ -34,13 +33,6 @@ const resetPasswordReducer = (state = initialState, { type, payload }) => {
         status: true,
         message: payload,
       };
-    case RESET_PASSWORD_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        status: false,
-        message: payload, //payload message ovde i razdvoj logout i fail
-      };
     case SET_RESTORE_EMAIL:
       return {
         ...state,
@@ -50,5 +42,5 @@ const resetPasswordReducer = (state = initialState, { type, payload }) => {
     default:
       return state;
   }
-}
+};
 export default resetPasswordReducer;

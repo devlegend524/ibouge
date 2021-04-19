@@ -9,16 +9,16 @@ var location = new mongoose.Schema({
   state: String,
   city: String,
   zip: String,
-  coordinates: Array
+  coordinates: Array,
 });
 
 var likes = new mongoose.Schema({
   user: String,
-  date: Date
+  date: Date,
 });
 var going = new mongoose.Schema({
   userId: String,
-  confirmationDate: Date
+  confirmationDate: Date,
 });
 
 var eventSchema = new mongoose.Schema({
@@ -27,16 +27,16 @@ var eventSchema = new mongoose.Schema({
   name: String,
   category: String,
   dateOfEvent: Date,
-  eventStartTime: Date,
-  eventEndTime: Date,
+  eventStartTime: String,
+  eventEndTime: String,
   description: String,
   location: location,
   eventImage: String,
   likes: [likes],
-  going: [going]
+  going: [going],
 });
 
-eventSchema.methods.getJSON = function() {
+eventSchema.methods.getJSON = function () {
   var newEvent = {
     _id: this._id,
     createdBy: this.createdBy,
@@ -50,7 +50,7 @@ eventSchema.methods.getJSON = function() {
     location: this.location,
     eventImage: this.eventImage,
     likes: this.likes,
-    going: this.going
+    going: this.going,
   };
 
   return newEvent;

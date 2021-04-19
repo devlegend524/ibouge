@@ -6,13 +6,14 @@ import {
   RESEED_DATABASE_LOADING,
   ME_LOADING,
   SET_REMEMBER_ME,
-} from "./action_types/auth";
+  SET_PROFILE_IMG_LOADING,
+} from './action_types/auth';
 import {
   RESET_PASSWORD_LOADING,
   SET_RESTORE_EMAIL,
-} from "./action_types/restorepassword";
+} from './action_types/restorepassword';
 
-export const loadMe = () => ({ type: ME_LOADING });
+export const loadMe = () => ({type: ME_LOADING});
 
 export const loginUserWithEmail = (payload) => ({
   type: LOGIN_WITH_EMAIL_LOADING,
@@ -24,9 +25,12 @@ export const logInUserWithOauth = () => ({
 });
 
 // activate user
-export const activeUser = (history) => ({
+export const activeUser = (token, history) => ({
   type: ACTIVATE_USER_LOADING,
-  payload: history,
+  payload: {
+    token: token,
+    history: history,
+  },
 });
 
 // Log user out
@@ -65,7 +69,10 @@ export const resetPassword = (payload) => ({
   type: RESET_PASSWORD_LOADING,
   payload,
 });
-
+export const setProfilePic = (payload) => ({
+  type: SET_PROFILE_IMG_LOADING,
+  payload,
+});
 // try {
 //   await axios.get('/api/users/reseed');
 

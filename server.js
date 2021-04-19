@@ -17,7 +17,7 @@ var MongoStore = require('connect-mongo').default;
 var flash = require('connect-flash');
 
 var mongoose = require('mongoose'); //for mongodb, database
-
+var socketio = require('socket.io');
 //var consolidate = require('consolidate');
 var models_user = require('./server/models/user.js'); // refering models in server.js
 var models_chats = require('./server/models/chat.js');
@@ -81,8 +81,8 @@ app.use(
     resave: true,
     saveUninitialized: false,
     store: MongoStore.create({
+      // mongoUrl: 'mongodb://' + dbHost + ':' + dbPort + '/ibouge',
       mongoUrl:
-        // 'mongodb://' + dbHost + ':' + dbPort + '/ibouge',
         'mongodb+srv://erosbalto:admin524ABC@cluster0.h0d3t.mongodb.net/ibouge?retryWrites=true&w=majority',
     }),
     secret: ')F*0fweofih0(F*H98hwef',
@@ -169,12 +169,24 @@ app.use(express.static(path.join(__dirname, './client/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build'));
 });
-
 const port = process.env.PORT || 5000;
+
+var hostName = 'ws://www.ibouge.com';
+if (
+  document.location.hostname === 'localhost' ||
+  document.location.hostname === '127.0.0.1'
+) {
+  hostName = document.location.hostname + ':' + port;
+}
 var server = app.listen(port, () => {
   console.log(`Server started on port ${port}`);
-  var io = require('socket.io').listen(server);
-  console.log('start socket io');
+  var io = socketio(server, {
+    cors: {
+      origin: hostName,
+      methods: ['GET', 'POST'],
+      credentials: true,
+    },
+  });
   var Chat = mongoose.model('Chat');
   var User = mongoose.model('User');
   var Microblog = mongoose.model('Microblog');
@@ -220,7 +232,10 @@ var server = app.listen(port, () => {
   };
 
   var addUserGoingToEvent = function (eventId, user) {
-    eventCtrl.addUserGoing(eventId, user);
+    eventCtrl
+      .addUserGoing(eventId, user)
+      .then((data) => console.log(data))
+      .catch((e) => console.log(e));
   };
 
   var removeUserGoingToEvent = function (eventId, user) {
@@ -281,6 +296,7 @@ var server = app.listen(port, () => {
     return new Promise((resolve, reject) => {
       chatCtrl.getChatByRoom(room).then(
         function (chat) {
+          console.log('succeed to get chat....', chat);
           chatCtrl.setLastLogin(myId, room).then(
             function () {
               return resolve('login updated');
@@ -342,14 +358,18 @@ var server = app.listen(port, () => {
   };
 
   io.sockets.on('connection', function (socket) {
-    console.log('try to connect socket io');
     // callback function for socket.on('disconnect')
     function disconnect() {
-      updateUserAvailability(socket.clientID, false);
-      socket.broadcast.emit('presence', {
-        user_id: socket.clientID,
-        status: 0,
-      });
+      updateUserAvailability(socket.clientID, false)
+        .then((data) => {
+          console.log(data);
+          socket.broadcast.emit('presence', {
+            user_id: socket.clientID,
+            status: 0,
+          });
+        })
+        .catch((err) => {});
+
       // remove the clients id so we can't
       // accidentally send anything to this socket
       // before it's totally removed from the sockets
@@ -359,16 +379,21 @@ var server = app.listen(port, () => {
     socket.on('disconnect', disconnect);
 
     socket.on('addUserID', function (data) {
+      console.log('addUserId', data);
       socket.clientID = data.id;
-      updateUserAvailability(data.id, true);
-      socket.broadcast.emit('presence', {
-        user_id: data.id,
-        status: 1,
-      });
+      updateUserAvailability(data.id, true)
+        .then((data) => {
+          socket.broadcast.emit('presence', {
+            user_id: data.id,
+            status: 1,
+          });
+        })
+        .catch((err) => console.log('addUserID error', err));
     });
 
     socket.on('join-room', function (data) {
       // join chat room
+      console.log(data.room);
       socket.join(data.room);
     });
 
@@ -379,8 +404,8 @@ var server = app.listen(port, () => {
 
     socket.on('new-notification', function (data) {
       var _socket = getSocket(data.to);
-
       if (_socket) {
+        console.log('emit new notification request', data);
         _socket.emit('newNotification', data);
       }
     });
@@ -444,7 +469,6 @@ var server = app.listen(port, () => {
 
       // get the receivers socket if they are online
       var _socket = getSocket(data.to);
-
       // if they are online
       if (_socket) {
         // get the amount of rooms they've joined
@@ -457,13 +481,14 @@ var server = app.listen(port, () => {
 
           // if they are already in room send them the message
           if (_socket.rooms[key] === data.room) {
-            socket.broadcast.to(data.room).emit('message', data);
-
+            socket.broadcast.emit('message', data);
+            console.log('====sdfsdfsdf====', data.room);
             // if they are not in the room then join them
             // then send them the message
           } else if (iterate === roomsLength) {
             _socket.join(data.room);
-            socket.broadcast.to(data.room).emit('message', data);
+            console.log('====sdfs === after join  === dfsdf====', data.room);
+            socket.broadcast.emit('message', data);
           }
         }
       }
@@ -473,9 +498,9 @@ var server = app.listen(port, () => {
     socket.on('message', sendMessage);
 
     socket.on('typing', function (data) {
-      console.log('User is typing');
+      console.log('User is typing', data.room);
       // get the receivers socket if they are online
-      var _socket = getSocket(data.to);
+      var _socket = getSocket(data.to._id);
 
       // if they are online
       if (_socket) {
@@ -491,14 +516,14 @@ var server = app.listen(port, () => {
           // if they are already in room send them the message
           if (_socket.rooms[key] === data.room) {
             console.log('User online, already in room');
-            socket.broadcast.to(data.room).emit('typing', data);
+            socket.broadcast.emit('typing', data);
 
             // if they are not in the room then join them
             // then send them the message
           } else if (iterate === roomsLength) {
             console.log('User online, join the room');
             _socket.join(data.room);
-            socket.broadcast.to(data.room).emit('typing', data);
+            socket.broadcast.emit('typing', data);
           }
         }
       }
@@ -557,6 +582,7 @@ var server = app.listen(port, () => {
         message: data.msg,
         time: time,
       };
+      console.log('adding msg', msg);
       addNewMicroblogMsg(data.room, msg);
 
       microblogCtrl.getMicroblogByRoom(data.room).then(
@@ -646,12 +672,18 @@ var server = app.listen(port, () => {
 
     // listening for session user to be added to the allInvolved array in microblog database
     socket.on('add-me-to-allInvolved', function (data) {
-      microblogCtrl.addMeToAllInvolved(data);
+      microblogCtrl
+        .addMeToAllInvolved(data)
+        .then((res) => console.log('add-me-to-allInvolved'))
+        .catch((err) => console.log('add-me-to-allInvolved error: ', err));
     });
 
     // listening for other people to be added to the allInvolved array in microblog database
     socket.on('update-all-involved-array', function (data) {
-      microblogCtrl.updateAllInvolvedArray(data);
+      microblogCtrl
+        .updateAllInvolvedArray(data)
+        .then((res) => console.log('update-all-involved-array'))
+        .catch((err) => console.log('update-all-involved-array error: ', err));
     });
 
     socket.on('close-chat', function (data) {
@@ -671,6 +703,7 @@ var server = app.listen(port, () => {
     });
 
     socket.on('open-chat', function (data) {
+      console.log('trying to open chat...', data.room);
       createOrSetLastLogin(data.id, data.room).then(
         function () {
           data.isGroupChat
@@ -763,7 +796,7 @@ var server = app.listen(port, () => {
         message: data.message,
         time: Date.now(),
       };
-
+      console.log('===============', data);
       addStatusReply(data, function (err, receivers, oData) {
         data._id = oData.reply._id;
         if (err) {

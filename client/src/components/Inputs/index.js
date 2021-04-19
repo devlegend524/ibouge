@@ -1,17 +1,23 @@
 export const InputControl = (params) => {
   return (
     <div className="form-group">
-      <label className="sr-only" htmlFor={params.nid}>{params.placeholder}</label>
+      <label className="sr-only" htmlFor={params.nid}>
+        {params.placeholder}
+      </label>
       <input
         id={params.nid}
         placeholder={params.placeholder}
         required="required"
         name={params.name}
-        className={params.customClass ? `form-control ${params.customClass}` : "form-control text"}
-        type={params.type ? params.type : "text"}
+        className={
+          params.customClass
+            ? `form-control ${params.customClass}`
+            : 'form-control text'
+        }
+        type={params.type ? params.type : 'text'}
         onChange={params.handle.handleChange}
         onBlur={params.handle.handleBlur}
-        value={params.handle[params.name]}
+        value={params.value ? params.value : params.handle[params.name]}
       />
     </div>
   );
@@ -43,7 +49,7 @@ export const CheckBoxControl = (params) => {
           name={params.name}
           onChange={params.handle.handleChange}
           onBlur={params.handle.handleBlur}
-          value={params.handle[params.name]}
+          checked={params.handle[params.name] ? 'checked' : ''}
         />
         <div className="slider round"></div>
       </label>
@@ -54,14 +60,23 @@ export const CheckBoxControl = (params) => {
 export const InputForControl = (params) => {
   return (
     <div className="form-group">
-      <label style={params.size ? { fontSize: params.size } : {}} htmlFor={params.nid}>{params.text}</label>
+      <label
+        style={params.size ? {fontSize: params.size} : {}}
+        htmlFor={params.nid}
+      >
+        {params.text}
+      </label>
       <input
         id={params.nid}
         placeholder={params.placeholder}
         required="required"
         name={params.name}
-        className={params.customClass ? `form-control ${params.customClass}` : "form-control text"}
-        type={params.type ? params.type : "text"}
+        className={
+          params.customClass
+            ? `form-control ${params.customClass}`
+            : 'form-control text'
+        }
+        type={params.type ? params.type : 'text'}
         onChange={params.handle.handleChange}
         onBlur={params.handle.handleBlur}
         value={params.handle[params.name]}
